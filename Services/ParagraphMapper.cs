@@ -1,345 +1,218 @@
 using InkAudit.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace InkAudit.Services;
 
 /// <summary>
-/// 记录已送检段落在批量拼接文本中的字符偏移区间 [Start, End)。
-/// </summary>
-/// <param name="Item">对应的段落视图模型。</param>
-/// <param name="Start">该段在拼接请求串中的起始下标（含）。</param>
-/// <param name="End">该段在拼接请求串中的结束下标（不含）。</param>
-public sealed record SentParagraphSpan(ParagraphItem Item, int Start, int End);
-
-/// <summary>
-/// 逐段批量送检的构造结果，分离出实际送检内容、偏移映射表与因过短被跳过的段落。
-/// </summary>
-/// <param name="Payload">用换行符拼接后的待检测请求文本。</param>
-/// <param name="SentSpans">所有参与本次送检的段落及其偏移区间。</param>
-/// <param name="SkippedItems">字数低于阈值而被跳过的短段落集合。</param>
-public sealed record BatchPayloadResult(
-    string Payload,
-    List<SentParagraphSpan> SentSpans,
-    List<ParagraphItem> SkippedItems);
-
-/// <summary>
-/// 章节切段、短段过滤与朱雀分段结果回填映射工具类。
-/// 支持朱雀接口的 [start, length] 位置协议、多段打包映射以及超长段多子片段加权聚合。
+/// 正文归一化与朱雀精确字符区间映射工具类。
+/// 严格遵循朱雀接口 <c>position = [start, length]</c>（起始偏移 + 片段长度）协议，
+/// 并将服务端 Unicode 码点偏移安全换算为 WinUI <c>RichEditBox</c> 使用的 UTF-16 字符索引。
 /// </summary>
 public static class ParagraphMapper
 {
     /// <summary>
-    /// 将整章原始文本按换行切分为有效非空自然段列表。
+    /// 将外部导入或剪贴板文本的换行符统一归一化为单字符 <c>\n</c>，保证送检与编辑器索引一一对应。
     /// </summary>
-    /// <param name="rawText">原始章节文本。</param>
-    /// <param name="showHeatmapTint">段落初始是否启用高风险淡底色。</param>
-    /// <returns>按顺序编号的段落视图模型列表。</returns>
-    public static List<ParagraphItem> SplitIntoParagraphs(string rawText, bool showHeatmapTint)
+    /// <param name="rawText">原始文本。</param>
+    /// <returns>归一化后的纯文本。</returns>
+    public static string NormalizeLineEndings(string? rawText)
     {
-        var result = new List<ParagraphItem>();
-        if (string.IsNullOrWhiteSpace(rawText))
+        if (string.IsNullOrEmpty(rawText))
+        {
+            return string.Empty;
+        }
+
+        return rawText.Replace("\r\n", "\n").Replace("\r", "\n");
+    }
+
+    /// <summary>
+    /// 将 <c>RichEditBox.Document.GetText</c> 返回的文本转换为送检负载：
+    /// 仅移除末尾自动附带的一个 <c>\r</c>，并将段内 <c>\r</c> 等长替换为 <c>\n</c>，
+    /// 确保每个字符在请求体中的下标与编辑器内完全一致。
+    /// </summary>
+    /// <param name="editorText">从 <c>RichEditBox</c> 读出的原始文档文本。</param>
+    /// <returns>与编辑器字符偏移 1:1 对应的送检文本。</returns>
+    public static string ExtractPayloadFromEditorText(string? editorText)
+    {
+        if (string.IsNullOrEmpty(editorText))
+        {
+            return string.Empty;
+        }
+
+        string trimmedEnd = editorText.EndsWith('\r')
+            ? editorText[..^1]
+            : editorText;
+
+        return trimmedEnd.Replace('\r', '\n');
+    }
+
+    /// <summary>
+    /// 统计正文中的非空白字符总数与非空自然段数，供纸面页眉展示。
+    /// </summary>
+    /// <param name="payload">换行已归一化的正文。</param>
+    /// <returns>有效字数与有效段落数的元组。</returns>
+    public static (int CharCount, int ParagraphCount) CountTextStats(string? payload)
+    {
+        if (string.IsNullOrWhiteSpace(payload))
+        {
+            return (0, 0);
+        }
+
+        int chars = AuditSegmentItem.CountNonWhitespace(payload);
+        int paragraphs = 0;
+        bool hasNonWhitespaceInLine = false;
+
+        foreach (char ch in payload)
+        {
+            if (ch == '\n' || ch == '\r')
+            {
+                if (hasNonWhitespaceInLine)
+                {
+                    paragraphs++;
+                    hasNonWhitespaceInLine = false;
+                }
+            }
+            else if (!char.IsWhiteSpace(ch))
+            {
+                hasNonWhitespaceInLine = true;
+            }
+        }
+
+        if (hasNonWhitespaceInLine)
+        {
+            paragraphs++;
+        }
+
+        return (chars, paragraphs);
+    }
+
+    /// <summary>
+    /// 将朱雀响应中的 <c>segment_labels</c> 按精确字符区间 <c>[start, length]</c> 映射为有序高亮片段列表。
+    /// </summary>
+    /// <param name="payload">发送给朱雀接口且与编辑器等长对齐的正文文本。</param>
+    /// <param name="response">朱雀分类接口响应。</param>
+    /// <returns>按起始偏移升序排列的精确字符片段集合。</returns>
+    public static List<AuditSegmentItem> MapResponseToSegments(
+        string payload,
+        ZhuqueClassifyResponse response)
+    {
+        var result = new List<AuditSegmentItem>();
+        if (string.IsNullOrEmpty(payload))
         {
             return result;
         }
 
-        var normalized = rawText.Replace("\r\n", "\n").Replace("\r", "\n");
-        var lines = normalized.Split('\n');
-
-        int index = 1;
-        foreach (var rawLine in lines)
+        var segments = response.SegmentLabels;
+        if (segments is null || segments.Count == 0)
         {
-            var trimmed = rawLine.Trim();
-            if (string.IsNullOrEmpty(trimmed))
+            var h = response.GetLabelRatio(0);
+            var a = response.GetLabelRatio(1);
+            var s = response.GetLabelRatio(2);
+            int dominant = (a >= h && a >= s) ? 1 : (s >= h && s >= a) ? 2 : 0;
+
+            result.Add(new AuditSegmentItem
+            {
+                Index = 1,
+                Start = 0,
+                Length = payload.Length,
+                Text = payload,
+                Label = dominant,
+                Confidence = response.SoftmaxConfidence
+            });
+            return result;
+        }
+
+        // 构造 Unicode 码点索引 -> UTF-16 索引映射表，兼容含代理对字符（如 Emoji）的精确偏移换算
+        int[] cpToUtf16 = BuildCodePointToUtf16Map(payload);
+        int totalCodePoints = cpToUtf16.Length - 1;
+        int fallbackCursor = 0;
+
+        foreach (var seg in segments)
+        {
+            int utf16Start = -1;
+            int utf16Length = 0;
+
+            // 策略 1：严格按朱雀 position = [start, length] 协议解析精确区间
+            if (seg.Position is { Count: >= 2 } && seg.Position[1] > 0)
+            {
+                int cpStart = Math.Clamp(seg.Position[0], 0, totalCodePoints);
+                int cpEnd = Math.Clamp(seg.Position[0] + seg.Position[1], cpStart, totalCodePoints);
+                utf16Start = cpToUtf16[cpStart];
+                utf16Length = cpToUtf16[cpEnd] - utf16Start;
+            }
+
+            // 策略 2：若位置缺失或越界，则按片段原文顺序定位兜底
+            if (utf16Length <= 0 && !string.IsNullOrEmpty(seg.Text))
+            {
+                string target = NormalizeLineEndings(seg.Text);
+                int found = payload.IndexOf(target, fallbackCursor, StringComparison.Ordinal);
+                if (found < 0)
+                {
+                    found = payload.IndexOf(target.Trim(), fallbackCursor, StringComparison.Ordinal);
+                    if (found >= 0)
+                    {
+                        utf16Start = found;
+                        utf16Length = target.Trim().Length;
+                    }
+                }
+                else
+                {
+                    utf16Start = found;
+                    utf16Length = target.Length;
+                }
+            }
+
+            if (utf16Start < 0 || utf16Length <= 0 || utf16Start >= payload.Length)
             {
                 continue;
             }
 
-            result.Add(new ParagraphItem
+            int clampedLength = Math.Min(utf16Length, payload.Length - utf16Start);
+            if (clampedLength <= 0)
             {
-                Index = index++,
-                Text = trimmed,
-                EditDraft = trimmed,
-                Status = ParagraphAuditStatus.Pending,
-                ShowHeatmapTint = showHeatmapTint
+                continue;
+            }
+
+            fallbackCursor = Math.Max(fallbackCursor, utf16Start + clampedLength);
+
+            result.Add(new AuditSegmentItem
+            {
+                Start = utf16Start,
+                Length = clampedLength,
+                Text = payload.Substring(utf16Start, clampedLength),
+                Label = seg.Label,
+                Confidence = seg.Conf
             });
+        }
+
+        result.Sort((a, b) => a.Start != b.Start ? a.Start.CompareTo(b.Start) : a.Length.CompareTo(b.Length));
+        for (int i = 0; i < result.Count; i++)
+        {
+            result[i].Index = i + 1;
         }
 
         return result;
     }
 
     /// <summary>
-    /// 将段落列表用双换行拼接为适合复制或整章编辑的可读文本。
+    /// 构造 Unicode 码点下标到 C# UTF-16 字符串下标的映射数组（末尾元素为 <c>text.Length</c>）。
     /// </summary>
-    /// <param name="items">段落集合。</param>
-    /// <returns>以空行分隔的完整章节文本。</returns>
-    public static string JoinParagraphs(IEnumerable<ParagraphItem> items)
-        => string.Join("\n\n", items.Select(p => p.Text));
-
-    /// <summary>
-    /// 将段落列表用单换行拼接为提交给朱雀全文合并接口的紧凑文本。
-    /// </summary>
-    /// <param name="items">段落集合。</param>
-    /// <returns>以单换行分隔的完整章节文本。</returns>
-    public static string JoinParagraphsForApi(IEnumerable<ParagraphItem> items)
-        => string.Join("\n", items.Select(p => p.Text));
-
-    /// <summary>
-    /// 按短段跳过策略过滤段落，构造逐段批量检测（is_merge: false）的请求体与字符偏移表。
-    /// </summary>
-    /// <param name="items">全章段落集合。</param>
-    /// <param name="enableShortSkip">是否启用短段跳过。</param>
-    /// <param name="shortThreshold">跳过最小非空白字数阈值。</param>
-    /// <returns>包含拼接文本、偏移表和跳过列表的构造结果。</returns>
-    public static BatchPayloadResult BuildBatchPayload(
-        IReadOnlyList<ParagraphItem> items,
-        bool enableShortSkip,
-        int shortThreshold)
+    /// <param name="text">目标字符串。</param>
+    /// <returns>长度为 <c>codePointCount + 1</c> 的下标映射数组。</returns>
+    private static int[] BuildCodePointToUtf16Map(string text)
     {
-        var spans = new List<SentParagraphSpan>();
-        var skipped = new List<ParagraphItem>();
-        var sb = new StringBuilder();
-
-        foreach (var item in items)
+        var map = new List<int>(text.Length + 1);
+        for (int i = 0; i < text.Length; i++)
         {
-            if (enableShortSkip && shortThreshold > 0 && item.CharCount < shortThreshold)
+            map.Add(i);
+            if (char.IsHighSurrogate(text[i]) && i + 1 < text.Length && char.IsLowSurrogate(text[i + 1]))
             {
-                skipped.Add(item);
-                continue;
-            }
-
-            if (sb.Length > 0)
-            {
-                sb.Append('\n');
-            }
-
-            int start = sb.Length;
-            sb.Append(item.Text);
-            int end = sb.Length;
-            spans.Add(new SentParagraphSpan(item, start, end));
-        }
-
-        return new BatchPayloadResult(sb.ToString(), spans, skipped);
-    }
-
-    /// <summary>
-    /// 将逐段批量检测响应中的 segment_labels 精确映射回对应的段落视图模型。
-    /// </summary>
-    /// <param name="spans">送检时记录的段落偏移映射表。</param>
-    /// <param name="response">朱雀接口返回的批量响应。</param>
-    public static void ApplyBatchResponse(
-        IReadOnlyList<SentParagraphSpan> spans,
-        ZhuqueClassifyResponse response)
-    {
-        var segments = response.SegmentLabels ?? new List<ZhuqueSegmentLabel>();
-        var buckets = new Dictionary<ParagraphItem, List<ZhuqueSegmentLabel>>();
-        foreach (var span in spans)
-        {
-            buckets[span.Item] = new List<ZhuqueSegmentLabel>();
-        }
-
-        var unmatchedSegments = new List<ZhuqueSegmentLabel>();
-
-        foreach (var seg in segments)
-        {
-            var matchedSpans = new List<SentParagraphSpan>();
-
-            // 策略 1：朱雀接口实测 position 为 [start, length]，按区间重叠支持“多段共享同一窗口”与“长段拆多片段”
-            if (seg.Position is { Count: >= 2 } && seg.Position[1] > 0)
-            {
-                int segStart = seg.Position[0];
-                int segEnd = segStart + seg.Position[1];
-
-                foreach (var span in spans)
-                {
-                    int overlap = Math.Min(span.End, segEnd) - Math.Max(span.Start, segStart);
-                    if (overlap > 0)
-                    {
-                        matchedSpans.Add(span);
-                    }
-                }
-            }
-
-            // 策略 2：位置缺失时按正文包含关系兜底匹配
-            if (matchedSpans.Count == 0 && !string.IsNullOrWhiteSpace(seg.Text))
-            {
-                var segTrim = seg.Text.Trim();
-                foreach (var span in spans)
-                {
-                    if (segTrim.Contains(span.Item.Text, StringComparison.Ordinal) ||
-                        span.Item.Text.Contains(segTrim, StringComparison.Ordinal))
-                    {
-                        matchedSpans.Add(span);
-                    }
-                }
-            }
-
-            if (matchedSpans.Count > 0)
-            {
-                foreach (var span in matchedSpans)
-                {
-                    buckets[span.Item].Add(seg);
-                }
-            }
-            else
-            {
-                unmatchedSegments.Add(seg);
+                i++;
             }
         }
 
-        // 策略 3：剩余未匹配分段按顺序回填至尚未获得结果的段落
-        if (unmatchedSegments.Count > 0)
-        {
-            var emptySpans = spans.Where(s => buckets[s.Item].Count == 0).ToList();
-            for (int i = 0; i < Math.Min(emptySpans.Count, unmatchedSegments.Count); i++)
-            {
-                buckets[emptySpans[i].Item].Add(unmatchedSegments[i]);
-            }
-        }
-
-        foreach (var span in spans)
-        {
-            var item = span.Item;
-            var segs = buckets[item];
-
-            if (segs.Count == 0)
-            {
-                item.Status = ParagraphAuditStatus.Error;
-                item.ErrorMessage = LocalizationService.Current.ErrSegmentMissing;
-                continue;
-            }
-
-            ApplySegmentsToItem(item, segs, recordDelta: false);
-        }
-    }
-
-    /// <summary>
-    /// 将单段独立重检的响应应用到目标段落，并保留旧置信度以展示改稿降幅。
-    /// </summary>
-    /// <param name="item">待更新的目标段落。</param>
-    /// <param name="response">单段请求的朱雀响应。</param>
-    public static void ApplySingleResponse(ParagraphItem item, ZhuqueClassifyResponse response)
-    {
-        var segs = response.SegmentLabels;
-        if (segs is { Count: > 0 })
-        {
-            ApplySegmentsToItem(item, segs, recordDelta: true);
-            return;
-        }
-
-        // 若 segment_labels 为空则回退至顶层汇总字段
-        var prevConf = item.Label.HasValue ? item.Confidence : (double?)null;
-        var h = response.GetLabelRatio(0);
-        var a = response.GetLabelRatio(1);
-        var s = response.GetLabelRatio(2);
-
-        int dominantLabel = 0;
-        if (a >= h && a >= s)
-        {
-            dominantLabel = 1;
-        }
-        else if (s >= h && s >= a)
-        {
-            dominantLabel = 2;
-        }
-
-        item.PreviousConfidence = prevConf;
-        item.Label = dominantLabel;
-        item.Confidence = response.SoftmaxConfidence;
-        item.HasMultiSegmentBreakdown = false;
-        item.HumanRatio = h;
-        item.SuspectedRatio = s;
-        item.AiRatio = a;
-        item.LastAuditedText = item.Text;
-        item.ErrorMessage = null;
-        item.Status = ParagraphAuditStatus.Audited;
-    }
-
-    /// <summary>
-    /// 将匹配到某一段落的 1 个或多个朱雀分段结果写入该段落模型；
-    /// 当存在多个子分段时，按字符长度加权聚合人工 / 疑似 / AI 三项占比与平均置信度。
-    /// </summary>
-    /// <param name="item">目标段落视图模型。</param>
-    /// <param name="segs">归属于该段落的分段列表。</param>
-    /// <param name="recordDelta">是否记录重检前的旧置信度用于变化量展示。</param>
-    private static void ApplySegmentsToItem(
-        ParagraphItem item,
-        List<ZhuqueSegmentLabel> segs,
-        bool recordDelta)
-    {
-        var prevConf = recordDelta && item.Label.HasValue ? item.Confidence : (double?)null;
-
-        if (segs.Count == 1)
-        {
-            var seg = segs[0];
-            item.PreviousConfidence = prevConf;
-            item.Label = seg.Label;
-            item.Confidence = seg.Conf;
-            item.HasMultiSegmentBreakdown = false;
-            item.HumanRatio = seg.Label == 0 ? 1 : 0;
-            item.AiRatio = seg.Label == 1 ? 1 : 0;
-            item.SuspectedRatio = seg.Label == 2 ? 1 : 0;
-            item.LastAuditedText = item.Text;
-            item.ErrorMessage = null;
-            item.Status = ParagraphAuditStatus.Audited;
-            return;
-        }
-
-        double totalWeight = 0;
-        double humanWeight = 0;
-        double aiWeight = 0;
-        double suspectedWeight = 0;
-        double weightedConf = 0;
-
-        foreach (var seg in segs)
-        {
-            double w = Math.Max(1, seg.Text?.Length ?? 1);
-            totalWeight += w;
-            weightedConf += seg.Conf * w;
-
-            switch (seg.Label)
-            {
-                case 0:
-                    humanWeight += w;
-                    break;
-                case 1:
-                    aiWeight += w;
-                    break;
-                case 2:
-                    suspectedWeight += w;
-                    break;
-                default:
-                    humanWeight += w;
-                    break;
-            }
-        }
-
-        double humanRatio = humanWeight / totalWeight;
-        double aiRatio = aiWeight / totalWeight;
-        double suspectedRatio = suspectedWeight / totalWeight;
-        double avgConf = weightedConf / totalWeight;
-
-        int dominantLabel = 0;
-        if (aiRatio >= suspectedRatio && aiRatio >= humanRatio)
-        {
-            dominantLabel = 1;
-        }
-        else if (suspectedRatio >= humanRatio)
-        {
-            dominantLabel = 2;
-        }
-
-        item.PreviousConfidence = prevConf;
-        item.Label = dominantLabel;
-        item.Confidence = avgConf;
-        item.HasMultiSegmentBreakdown = true;
-        item.HumanRatio = humanRatio;
-        item.SuspectedRatio = suspectedRatio;
-        item.AiRatio = aiRatio;
-        item.LastAuditedText = item.Text;
-        item.ErrorMessage = null;
-        item.Status = ParagraphAuditStatus.Audited;
+        map.Add(text.Length);
+        return map.ToArray();
     }
 }

@@ -36,16 +36,10 @@ public sealed class SettingsService
         /// <summary>朱雀接口地址。</summary>
         public string EndpointUrl { get; set; } = AppSettings.DefaultEndpointUrl;
 
-        /// <summary>是否开启短段跳过策略。</summary>
-        public bool EnableShortParagraphSkip { get; set; } = true;
-
-        /// <summary>短段跳过最小字数阈值。</summary>
-        public int ShortParagraphThreshold { get; set; } = 15;
-
         /// <summary>是否开启全文合并复核。</summary>
         public bool EnableFullTextMergeCheck { get; set; } = true;
 
-        /// <summary>是否开启高风险段落淡底色。</summary>
+        /// <summary>是否开启正文字符区间背景高亮。</summary>
         public bool ShowHeatmapTint { get; set; } = true;
 
         /// <summary>外观主题模式。</summary>
@@ -104,8 +98,6 @@ public sealed class SettingsService
                 EndpointUrl = string.IsNullOrWhiteSpace(dto.EndpointUrl)
                     ? AppSettings.DefaultEndpointUrl
                     : dto.EndpointUrl,
-                EnableShortParagraphSkip = dto.EnableShortParagraphSkip,
-                ShortParagraphThreshold = Math.Clamp(dto.ShortParagraphThreshold, 0, 500),
                 EnableFullTextMergeCheck = dto.EnableFullTextMergeCheck,
                 ShowHeatmapTint = dto.ShowHeatmapTint,
                 ThemeMode = dto.ThemeMode is "Light" or "Dark" ? dto.ThemeMode : "Default"
@@ -128,8 +120,6 @@ public sealed class SettingsService
             EndpointUrl = string.IsNullOrWhiteSpace(settings.EndpointUrl)
                 ? AppSettings.DefaultEndpointUrl
                 : settings.EndpointUrl.Trim(),
-            EnableShortParagraphSkip = settings.EnableShortParagraphSkip,
-            ShortParagraphThreshold = Math.Clamp(settings.ShortParagraphThreshold, 0, 500),
             EnableFullTextMergeCheck = settings.EnableFullTextMergeCheck,
             ShowHeatmapTint = settings.ShowHeatmapTint,
             ThemeMode = settings.ThemeMode

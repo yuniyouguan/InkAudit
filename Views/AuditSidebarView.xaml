@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 右侧全文诊断与片段导航组件：AI 占比主指标、三色堆叠条、高亮聚焦图例、片段热力矩阵及风险片段速览 -->
+<UserControl
+    x:Class="InkAudit.Views.AuditSidebarView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:models="using:InkAudit.Models"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Spacing="12">
+
+            <!-- 区块 1：AI 占比主指标、三色比例条、高亮聚焦图例与辅助指标 -->
+            <Border Style="{StaticResource Surface1PanelStyle}">
+                <StackPanel Spacing="18">
+                    <!-- 主指标：AI 占比大号等宽数字 + 改稿前后变化量 -->
+                    <StackPanel Spacing="2">
+                        <Grid>
+                            <TextBlock
+                                Text="{x:Bind Strings.LabelAiRatio}"
+                                FontSize="12"
+                                FontWeight="{x:Bind TypeScale.BodyWeight, Mode=OneWay}"
+                                Foreground="{ThemeResource MutedTextBrush}"
+                                VerticalAlignment="Center" />
+                            <TextBlock
+                                Visibility="{x:Bind Summary.AiDeltaVisibility, Mode=OneWay}"
+                                Text="{x:Bind Summary.AiDeltaText, Mode=OneWay}"
+                                FontSize="12"
+                                FontWeight="{x:Bind TypeScale.MediumWeight, Mode=OneWay}"
+                                Typography.NumeralAlignment="Tabular"
+                                Foreground="{x:Bind Summary.AiDeltaBrush, Mode=OneWay}"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center" />
+                        </Grid>
+                        <TextBlock
+                            Text="{x:Bind Summary.AiPercentText, Mode=OneWay}"
+                            Opacity="{x:Bind Summary.ValueOpacity, Mode=OneWay}"
+                            FontSize="38"
+                            FontWeight="{x:Bind TypeScale.StrongWeight, Mode=OneWay}"
+                            CharacterSpacing="-20"
+                            Typography.NumeralAlignment="Tabular"
+                            Foreground="{ThemeResource InkPrimaryBrush}" />
+                        <TextBlock
+                            Visibility="{x:Bind Summary.StaleVisibility, Mode=OneWay}"
+                            Text="{x:Bind Strings.LabelStaleNotice}"
+                            FontSize="12"
+                            Foreground="{ThemeResource SuspectedAccentBrush}" />
+                    </StackPanel>
+
+                    <!-- 全文三色堆叠比例条（绿/黄/红） -->
+                    <Border Height="6" CornerRadius="3" Background="{ThemeResource TrackBgBrush}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="{x:Bind Summary.HumanBarWidth, Mode=OneWay}" />
+                                <ColumnDefinition Width="{x:Bind Summary.SuspectedBarWidth, Mode=OneWay}" />
+                                <ColumnDefinition Width="{x:Bind Summary.AiBarWidth, Mode=OneWay}" />
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Background="{ThemeResource HumanAccentBrush}" />
+                            <Border Grid.Column="1" Background="{ThemeResource SuspectedAccentBrush}" />
+                            <Border Grid.Column="2" Background="{ThemeResource AiAccentBrush}" />
+                        </Grid>
+                    </Border>
+
+                    <!-- 三项占比图例行（点击仅高亮该类别文字，再次点击恢复全部三色） -->
+                    <StackPanel Spacing="2" Margin="-10,-6,-10,0">
+                        <Button Style="{StaticResource LegendRowButtonStyle}" Click="OnToggleHumanFilterClick">
+                            <Border x:Name="HumanKpiBorder" CornerRadius="8" Padding="10,7">
+                                <Grid ColumnSpacing="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Ellipse Width="7" Height="7" Fill="{ThemeResource HumanAccentBrush}" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" Text="{x:Bind Strings.LabelHuman}" FontSize="13" FontWeight="{x:Bind TypeScale.BodyWeight, Mode=OneWay}" Foreground="{ThemeResource InkSecondaryBrush}" VerticalAlignment="Center" />
+                                    <TextBlock
+                                        Grid.Column="2"
+                                        Text="{x:Bind Summary.HumanPercentText, Mode=OneWay}"
+                                        Opacity="{x:Bind Summary.ValueOpacity, Mode=OneWay}"
+                                        FontSize="13"
+                                        FontWeight="{x:Bind TypeScale.MediumWeight, Mode=OneWay}"
+                                        Typography.NumeralAlignment="Tabular"
+                                        Foreground="{ThemeResource InkPrimaryBrush}"
+                                        VerticalAlignment="Center" />
+                                </Grid>
+                            </Border>
+                        </Button>
+
+                        <Button Style="{StaticResource LegendRowButtonStyle}" Click="OnToggleSuspectedFilterClick">
+                            <Border x:Name="SuspectedKpiBorder" CornerRadius="8" Padding="10,7">
+                                <Grid ColumnSpacing="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Ellipse Width="7" Height="7" Fill="{ThemeResource SuspectedAccentBrush}" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" Text="{x:Bind Strings.LabelSuspected}" FontSize="13" FontWeight="{x:Bind TypeScale.BodyWeight, Mode=OneWay}" Foreground="{ThemeResource InkSecondaryBrush}" VerticalAlignment="Center" />
+                                    <TextBlock
+                                        Grid.Column="2"
+                                        Text="{x:Bind Summary.SuspectedPercentText, Mode=OneWay}"
+                                        Opacity="{x:Bind Summary.ValueOpacity, Mode=OneWay}"
+                                        FontSize="13"
+                                        FontWeight="{x:Bind TypeScale.MediumWeight, Mode=OneWay}"
+                                        Typography.NumeralAlignment="Tabular"
+                                        Foreground="{ThemeResource InkPrimaryBrush}"
+                                        VerticalAlignment="Center" />
+                                </Grid>
+                            </Border>
+                        </Button>
+
+                        <Button Style="{StaticResource LegendRowButtonStyle}" Click="OnToggleAiFilterClick">
+                            <Border x:Name="AiKpiBorder" CornerRadius="8" Padding="10,7">
+                                <Grid ColumnSpacing="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Ellipse Width="7" Height="7" Fill="{ThemeResource AiAccentBrush}" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" Text="{x:Bind Strings.LabelAi}" FontSize="13" FontWeight="{x:Bind TypeScale.BodyWeight, Mode=OneWay}" Foreground="{ThemeResource InkSecondaryBrush}" VerticalAlignment="Center" />
+                                    <TextBlock
+                                        Grid.Column="2"
+                                        Text="{x:Bind Summary.AiPercentText, Mode=OneWay}"
+                                        Opacity="{x:Bind Summary.ValueOpacity, Mode=OneWay}"
+                                        FontSize="13"
+                                        FontWeight="{x:Bind TypeScale.MediumWeight, Mode=OneWay}"
+                                        Typography.NumeralAlignment="Tabular"
+                                        Foreground="{ThemeResource InkPrimaryBrush}"
+                                        VerticalAlignment="Center" />
+                                </Grid>
+                            </Border>
+                        </Button>
+                    </StackPanel>
+
+                    <!-- 辅助指标：整体置信度与风险占比 -->
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Spacing="2">
+                            <TextBlock Text="{x:Bind Strings.LabelConfidence}" FontSize="11.5" FontWeight="{x:Bind TypeScale.BodyWeight, Mode=OneWay}" Foreground="{ThemeResource MutedTextBrush}" />
+                            <TextBlock
+                                Text="{x:Bind Summary.SoftmaxConfidenceText, Mode=OneWay}"
+                                Opacity="{x:Bind Summary.ValueOpacity, Mode=OneWay}"
+                                FontSize="15"
+                                FontWeight="{x:Bind TypeScale.MediumWeight, Mode=OneWay}"
+                                Typography.NumeralAlignment="Tabular"
+                                Foreground="{ThemeResource InkPrimaryBrush}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Spacing="2">
+                            <TextBlock Text="{x:Bind Strings.LabelRiskRatio}" FontSize="11.5" FontWeight="{x:Bind TypeScale.BodyWeight, Mode=OneWay}" Foreground="{ThemeResource MutedTextBrush}" />
+                            <TextBlock
+                                Text="{x:Bind Summary.RatioConfidenceText, Mode=OneWay}"
+                                Opacity="{x:Bind Summary.ValueOpacity, Mode=OneWay}"
+                                FontSize="15"
+                                FontWeight="{x:Bind TypeScale.MediumWeight, Mode=OneWay}"
+                                Typography.NumeralAlignment="Tabular"
+                                Foreground="{ThemeResource InkPrimaryBrush}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- 逐段对照参考（开启合并复核时出现） -->
+                    <TextBlock
+                        Visibility="{x:Bind Summary.SegmentComparisonVisibility, Mode=OneWay}"
+                        Text="{x:Bind Summary.SegmentComparisonText, Mode=OneWay}"
+                        FontSize="11.5"
+                        Typography.NumeralAlignment="Tabular"
+                        Foreground="{ThemeResource MutedTextBrush}" />
+                </StackPanel>
+            </Border>
+
+            <!-- 区块 2：朱雀原始切片热力分布与风险片段跳转导航（Alt+↑ / Alt+↓） -->
+            <Border x:Name="DistributionCard" Style="{StaticResource Surface1PanelStyle}" Visibility="Collapsed">
+                <StackPanel Spacing="14">
+                    <Grid>
+                        <TextBlock
+                            Text="{x:Bind Strings.LabelDistribution}"
+                            FontSize="12"
+                            FontWeight="{x:Bind TypeScale.BodyWeight, Mode=OneWay}"
+                            Foreground="{ThemeResource MutedTextBrush}"
+                            VerticalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal" Spacing="0" HorizontalAlignment="Right" Margin="0,-8,-10,-8">
+                            <Button x:Name="PrevRiskButton" Style="{StaticResource IconButtonStyle}" Width="28" Height="28" Click="OnPreviousRiskClick" ToolTipService.ToolTip="{x:Bind Strings.ActionPrevRisk}">
+                                <Button.KeyboardAccelerators>
+                                    <KeyboardAccelerator Key="Up" Modifiers="Menu" />
+                                </Button.KeyboardAccelerators>
+                                <FontIcon Glyph="&#xE70E;" FontSize="11" />
+                            </Button>
+                            <Button x:Name="NextRiskButton" Style="{StaticResource IconButtonStyle}" Width="28" Height="28" Click="OnNextRiskClick" ToolTipService.ToolTip="{x:Bind Strings.ActionNextRisk}">
+                                <Button.KeyboardAccelerators>
+                                    <KeyboardAccelerator Key="Down" Modifiers="Menu" />
+                                </Button.KeyboardAccelerators>
+                                <FontIcon Glyph="&#xE70D;" FontSize="11" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- 可点击片段风险色块矩阵（色彩饱和度与正文高亮浓淡同步） -->
+                    <ItemsRepeater x:Name="HeatmapRepeater">
+                        <ItemsRepeater.Layout>
+                            <UniformGridLayout
+                                MinItemWidth="14"
+                                MinItemHeight="14"
+                                MinRowSpacing="4"
+                                MinColumnSpacing="4"
+                                ItemsStretch="None" />
+                        </ItemsRepeater.Layout>
+                        <ItemsRepeater.ItemTemplate>
+                            <DataTemplate x:DataType="models:AuditSegmentItem">
+                                <Button
+                                    Width="14"
+                                    Height="14"
+                                    Padding="0"
+                                    MinWidth="0"
+                                    MinHeight="0"
+                                    CornerRadius="4"
+                                    BorderThickness="0"
+                                    Background="{x:Bind HeatmapTileBrush, Mode=OneWay}"
+                                    Tag="{x:Bind}"
+                                    Click="OnHeatmapTileClick"
+                                    ToolTipService.ToolTip="{x:Bind TooltipSummary, Mode=OneWay}" />
+                            </DataTemplate>
+                        </ItemsRepeater.ItemTemplate>
+                    </ItemsRepeater>
+
+                    <!-- 高风险片段快速跳转列表 -->
+                    <ItemsRepeater x:Name="RiskListRepeater" Visibility="Collapsed" Margin="-10,0">
+                        <ItemsRepeater.Layout>
+                            <StackLayout Spacing="2" />
+                        </ItemsRepeater.Layout>
+                        <ItemsRepeater.ItemTemplate>
+                            <DataTemplate x:DataType="models:AuditSegmentItem">
+                                <Button
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Stretch"
+                                    Padding="10,7"
+                                    Style="{StaticResource GhostSurfaceButtonStyle}"
+                                    Tag="{x:Bind}"
+                                    Click="OnHeatmapTileClick">
+                                    <Grid ColumnSpacing="10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                            Grid.Column="0"
+                                            Text="{x:Bind IndexDisplay, Mode=OneWay}"
+                                            FontSize="11.5"
+                                            Typography.NumeralAlignment="Tabular"
+                                            Foreground="{ThemeResource MutedTextBrush}"
+                                            VerticalAlignment="Center" />
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Text="{x:Bind PreviewSnippet, Mode=OneWay}"
+                                            FontSize="12.5"
+                                            Foreground="{ThemeResource InkPrimaryBrush}"
+                                            TextTrimming="CharacterEllipsis"
+                                            VerticalAlignment="Center" />
+                                        <TextBlock
+                                            Grid.Column="2"
+                                            Text="{x:Bind AiPercentText, Mode=OneWay}"
+                                            FontSize="12"
+                                            FontWeight="{x:Bind MediumFontWeight, Mode=OneWay}"
+                                            Typography.NumeralAlignment="Tabular"
+                                            Foreground="{x:Bind LabelBadgeForeground, Mode=OneWay}"
+                                            VerticalAlignment="Center" />
+                                    </Grid>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsRepeater.ItemTemplate>
+                    </ItemsRepeater>
+                </StackPanel>
+            </Border>
+
+            <!-- 本次检测实际扣减的 Makers Token 计数（仅在有消耗时显示） -->
+            <TextBlock
+                Visibility="{x:Bind Summary.TokensVisibility, Mode=OneWay}"
+                Text="{x:Bind Summary.TokensDisplay, Mode=OneWay}"
+                FontSize="11.5"
+                Typography.NumeralAlignment="Tabular"
+                Foreground="{ThemeResource MutedTextBrush}"
+                Margin="20,0,0,0" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

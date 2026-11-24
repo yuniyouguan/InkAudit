@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 应用设置弹窗：管理 API Key 鉴权与连通性测试、短段跳过策略、全文复核开关及外观主题 -->
+<!-- 应用设置弹窗：管理 API Key 鉴权与连通性测试、全文复核开关、文字高亮开关及外观主题 -->
 <ContentDialog
     x:Class="InkAudit.Views.SettingsDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -26,50 +26,30 @@
                 <PasswordBox
                     x:Name="ApiKeyBox"
                     Grid.Column="0"
+                    CornerRadius="8"
                     PasswordRevealMode="Peek" />
                 <Button
                     x:Name="TestConnectionButton"
                     Grid.Column="1"
+                    Style="{StaticResource GhostSurfaceButtonStyle}"
+                    Background="{ThemeResource Surface3Brush}"
+                    Padding="14,6"
                     Content="{x:Bind Strings.ActionTest}"
                     Click="OnTestConnectionClick" />
             </Grid>
             <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
                 <ProgressRing x:Name="TestProgressRing" Width="14" Height="14" IsActive="False" Visibility="Collapsed" />
-                <TextBlock x:Name="TestStatusText" FontSize="12" TextWrapping="Wrap" Visibility="Collapsed" />
+                <TextBlock x:Name="TestStatusText" FontSize="12" Typography.NumeralAlignment="Tabular" TextWrapping="Wrap" Visibility="Collapsed" />
             </StackPanel>
         </StackPanel>
 
         <!-- 区块 2：朱雀分类接口网关地址 -->
         <StackPanel Spacing="6">
             <TextBlock Text="{x:Bind Strings.SettingsEndpoint}" FontSize="12.5" Foreground="{ThemeResource MutedTextBrush}" />
-            <TextBox x:Name="EndpointBox" />
+            <TextBox x:Name="EndpointBox" CornerRadius="8" />
         </StackPanel>
 
-        <!-- 区块 3：短段跳过策略与最小字数阈值 -->
-        <Grid ColumnSpacing="12">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="108" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="{x:Bind Strings.SettingsSkipShort}" FontSize="13" VerticalAlignment="Center" />
-            <ToggleSwitch
-                x:Name="ShortSkipToggle"
-                Grid.Column="1"
-                OnContent=""
-                OffContent=""
-                MinWidth="0"
-                Toggled="OnShortSkipToggled" />
-            <NumberBox
-                x:Name="ShortThresholdBox"
-                Grid.Column="2"
-                Minimum="0"
-                Maximum="200"
-                SmallChange="5"
-                SpinButtonPlacementMode="Compact" />
-        </Grid>
-
-        <!-- 区块 4：全文合并复核开关（默认开启） -->
+        <!-- 区块 3：全文合并复核开关（默认开启） -->
         <Grid>
             <TextBlock Text="{x:Bind Strings.SettingsFullMerge}" FontSize="13" VerticalAlignment="Center" />
             <ToggleSwitch
@@ -80,7 +60,7 @@
                 MinWidth="0" />
         </Grid>
 
-        <!-- 区块 5：高风险段落背景淡着色开关 -->
+        <!-- 区块 4：正文字符区间背景高亮开关 -->
         <Grid>
             <TextBlock Text="{x:Bind Strings.SettingsHeatmapTint}" FontSize="13" VerticalAlignment="Center" />
             <ToggleSwitch
@@ -91,7 +71,7 @@
                 MinWidth="0" />
         </Grid>
 
-        <!-- 区块 6：界面主题模式选择 -->
+        <!-- 区块 5：界面主题模式选择 -->
         <Grid>
             <TextBlock Text="{x:Bind Strings.SettingsTheme}" FontSize="13" VerticalAlignment="Center" />
             <ComboBox x:Name="ThemeComboBox" Width="140" HorizontalAlignment="Right">

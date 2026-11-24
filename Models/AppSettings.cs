@@ -21,22 +21,12 @@ public sealed class AppSettings
     public string EndpointUrl { get; set; } = DefaultEndpointUrl;
 
     /// <summary>
-    /// 是否启用短段落跳过策略（仅对逐段检测生效，全文合并复核始终保留完整正文）。
-    /// </summary>
-    public bool EnableShortParagraphSkip { get; set; } = true;
-
-    /// <summary>
-    /// 短段落跳过字数阈值（按非空白字符数计算）。
-    /// </summary>
-    public int ShortParagraphThreshold { get; set; } = 15;
-
-    /// <summary>
     /// 是否在点击检测时同步执行全文合并复核（is_merge: true），默认开启。
     /// </summary>
     public bool EnableFullTextMergeCheck { get; set; } = true;
 
     /// <summary>
-    /// 是否为高风险与疑似 AI 段落启用极淡背景底色标识。
+    /// 是否按朱雀返回的精确字符区间为正文施加红/黄/绿背景高亮。
     /// </summary>
     public bool ShowHeatmapTint { get; set; } = true;
 

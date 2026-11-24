@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 墨鉴（InkAudit）全局应用资源字典：定义浅色/暗色中性微色阶 Surface 0~3、语义色及核心按钮/容器样式 -->
+<!-- 墨鉴（InkAudit）全局应用资源字典：暖灰纸感中性色阶 Surface 0~3、低饱和墨色语义色、克制滚动条及核心按钮/容器样式 -->
 <Application
     x:Class="InkAudit.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -11,89 +11,175 @@
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
             </ResourceDictionary.MergedDictionaries>
 
-            <!-- 浅色与暗色主题色阶表：采用 1.5%~2.5% 微明度递增替代 1px 边框，全站禁用纯黑 #000 -->
+            <!-- 浅色与暗色主题色阶表：以微明度递增替代 1px 边框，全站禁用纯黑 #000 -->
             <ResourceDictionary.ThemeDictionaries>
-                <!-- 浅色主题资源 -->
+                <!-- 浅色主题资源：暖灰石底 + 纯白纸面 -->
                 <ResourceDictionary x:Key="Light">
-                    <SolidColorBrush x:Key="Surface0Brush" Color="#F4F4F3" />
-                    <SolidColorBrush x:Key="Surface1Brush" Color="#F9F9F8" />
+                    <SolidColorBrush x:Key="Surface0Brush" Color="#F2F1EE" />
+                    <SolidColorBrush x:Key="Surface1Brush" Color="#FAFAF8" />
                     <SolidColorBrush x:Key="Surface2Brush" Color="#FFFFFF" />
-                    <SolidColorBrush x:Key="Surface3Brush" Color="#ECECE9" />
-                    <SolidColorBrush x:Key="SurfaceRecessedBrush" Color="#EFEFED" />
+                    <SolidColorBrush x:Key="Surface3Brush" Color="#ECEBE7" />
+                    <SolidColorBrush x:Key="SurfaceRecessedBrush" Color="#F5F4F1" />
+                    <Color x:Key="InlineEditBgColor">#FFFFFF</Color>
+                    <SolidColorBrush x:Key="InlineEditBgBrush" Color="#FFFFFF" />
 
                     <SolidColorBrush x:Key="InkPrimaryBrush" Color="#1A1A19" />
-                    <SolidColorBrush x:Key="InkSecondaryBrush" Color="#595956" />
-                    <SolidColorBrush x:Key="MutedTextBrush" Color="#8C8C87" />
+                    <SolidColorBrush x:Key="InkSecondaryBrush" Color="#5C5B57" />
+                    <SolidColorBrush x:Key="MutedTextBrush" Color="#8F8E89" />
 
                     <SolidColorBrush x:Key="PrimaryCtaBgBrush" Color="#1A1A19" />
-                    <SolidColorBrush x:Key="PrimaryCtaHoverBrush" Color="#2E2E2C" />
-                    <SolidColorBrush x:Key="PrimaryCtaFgBrush" Color="#F9F9F8" />
+                    <SolidColorBrush x:Key="PrimaryCtaHoverBrush" Color="#34332F" />
+                    <SolidColorBrush x:Key="PrimaryCtaFgBrush" Color="#FAFAF8" />
+                    <SolidColorBrush x:Key="BusyCtaBgBrush" Color="#E6E5E0" />
+                    <SolidColorBrush x:Key="BusyCtaHoverBrush" Color="#DCDAD4" />
 
-                    <SolidColorBrush x:Key="HumanAccentBrush" Color="#15803D" />
-                    <SolidColorBrush x:Key="HumanSoftBgBrush" Color="#1215803D" />
-                    <SolidColorBrush x:Key="SuspectedAccentBrush" Color="#B45309" />
-                    <SolidColorBrush x:Key="SuspectedSoftBgBrush" Color="#14D97706" />
-                    <SolidColorBrush x:Key="AiAccentBrush" Color="#DC2626" />
-                    <SolidColorBrush x:Key="AiSoftBgBrush" Color="#12DC2626" />
+                    <SolidColorBrush x:Key="HumanAccentBrush" Color="#16A34A" />
+                    <SolidColorBrush x:Key="HumanSoftBgBrush" Color="#1416A34A" />
+                    <SolidColorBrush x:Key="SuspectedAccentBrush" Color="#CA8A04" />
+                    <SolidColorBrush x:Key="SuspectedSoftBgBrush" Color="#18EAB308" />
+                    <SolidColorBrush x:Key="AiAccentBrush" Color="#E53935" />
+                    <SolidColorBrush x:Key="AiSoftBgBrush" Color="#14E53935" />
                     <SolidColorBrush x:Key="ModifiedAccentBrush" Color="#2563EB" />
 
-                    <SolidColorBrush x:Key="TrackBgBrush" Color="#E7E7E4" />
+                    <SolidColorBrush x:Key="BubbleBgBrush" Color="#1F1F1D" />
+                    <SolidColorBrush x:Key="BubbleFgBrush" Color="#FAFAF8" />
+                    <SolidColorBrush x:Key="BubbleMutedBrush" Color="#A6A5A0" />
 
-                    <!-- 覆盖默认亮蓝色聚焦边框与开关颜色，统一为克制中性近黑色系 -->
+                    <SolidColorBrush x:Key="TrackBgBrush" Color="#E8E7E3" />
+
+                    <!-- 纸面上下缘渐隐遮罩：避免正文滚动到容器上下边缘时文字被生硬裁切 -->
+                    <LinearGradientBrush x:Key="PaperTopFadeBrush" StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#FFFFFFFF" Offset="0" />
+                        <GradientStop Color="#00FFFFFF" Offset="1" />
+                    </LinearGradientBrush>
+                    <LinearGradientBrush x:Key="PaperBottomFadeBrush" StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#00FFFFFF" Offset="0" />
+                        <GradientStop Color="#FFFFFFFF" Offset="1" />
+                    </LinearGradientBrush>
+
+                    <!-- 统一覆盖 WinUI 原生亮蓝色强调令牌，使开关、进度环与弹窗主按钮融入墨色中性体系 -->
+                    <SolidColorBrush x:Key="AccentFillColorDefaultBrush" Color="#1A1A19" />
+                    <SolidColorBrush x:Key="AccentFillColorSecondaryBrush" Color="#34332F" />
+                    <SolidColorBrush x:Key="AccentFillColorTertiaryBrush" Color="#4A4944" />
+                    <SolidColorBrush x:Key="AccentFillColorSelectedTextBackgroundBrush" Color="#2E2D2A" />
+                    <SolidColorBrush x:Key="TextOnAccentFillColorPrimaryBrush" Color="#FAFAF8" />
+                    <SolidColorBrush x:Key="TextOnAccentFillColorSecondaryBrush" Color="#D6D5D0" />
+                    <SolidColorBrush x:Key="TextOnAccentFillColorSelectedTextBrush" Color="#FAFAF8" />
+                    <SolidColorBrush x:Key="AccentTextFillColorPrimaryBrush" Color="#1A1A19" />
+                    <SolidColorBrush x:Key="AccentTextFillColorSecondaryBrush" Color="#34332F" />
+                    <SolidColorBrush x:Key="AccentTextFillColorTertiaryBrush" Color="#5C5B57" />
+
+                    <!-- 覆盖默认聚焦边框、输入控件底色与开关颜色 -->
                     <SolidColorBrush x:Key="FocusVisualPrimaryBrush" Color="#331A1A19" />
                     <SolidColorBrush x:Key="FocusVisualSecondaryBrush" Color="#141A1A19" />
                     <SolidColorBrush x:Key="TextControlBorderBrush" Color="Transparent" />
                     <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="Transparent" />
                     <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="Transparent" />
-                    <SolidColorBrush x:Key="TextControlBackground" Color="#EFEFED" />
-                    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#EBEBE8" />
-                    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="TextControlBackground" Color="#F2F1EE" />
+                    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#EEEDEA" />
+                    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#ECEBE7" />
                     <SolidColorBrush x:Key="ToggleSwitchFillOn" Color="#1A1A19" />
-                    <SolidColorBrush x:Key="ToggleSwitchFillOnPointerOver" Color="#30302E" />
-                    <SolidColorBrush x:Key="ToggleSwitchFillOnPressed" Color="#3F3F3C" />
+                    <SolidColorBrush x:Key="ToggleSwitchFillOnPointerOver" Color="#34332F" />
+                    <SolidColorBrush x:Key="ToggleSwitchFillOnPressed" Color="#45443F" />
                     <SolidColorBrush x:Key="ToggleSwitchKnobFillOn" Color="#FFFFFF" />
                     <SolidColorBrush x:Key="ToggleSwitchKnobFillOnPointerOver" Color="#FFFFFF" />
+
+                    <!-- 轻量化滚动条：移除厚重轨道底色，改为低对比暖灰半透明滑块 -->
+                    <SolidColorBrush x:Key="ScrollBarTrackFill" Color="Transparent" />
+                    <SolidColorBrush x:Key="ScrollBarTrackFillPointerOver" Color="Transparent" />
+                    <SolidColorBrush x:Key="ScrollBarTrackFillDisabled" Color="Transparent" />
+                    <SolidColorBrush x:Key="ScrollBarTrackStroke" Color="Transparent" />
+                    <SolidColorBrush x:Key="ScrollBarTrackStrokePointerOver" Color="Transparent" />
+                    <SolidColorBrush x:Key="ScrollBarThumbFill" Color="#241A1A19" />
+                    <SolidColorBrush x:Key="ScrollBarThumbFillPointerOver" Color="#401A1A19" />
+                    <SolidColorBrush x:Key="ScrollBarThumbFillPressed" Color="#591A1A19" />
+                    <SolidColorBrush x:Key="ScrollBarButtonArrowForeground" Color="#331A1A19" />
+                    <SolidColorBrush x:Key="ScrollBarButtonArrowForegroundPointerOver" Color="#661A1A19" />
+                    <SolidColorBrush x:Key="ScrollBarButtonArrowForegroundPressed" Color="#991A1A19" />
                 </ResourceDictionary>
 
-                <!-- 暗色主题资源 -->
+                <!-- 暗色主题资源：近黑暖灰底 + 微抬升纸面 -->
                 <ResourceDictionary x:Key="Dark">
-                    <SolidColorBrush x:Key="Surface0Brush" Color="#141413" />
-                    <SolidColorBrush x:Key="Surface1Brush" Color="#1A1A19" />
-                    <SolidColorBrush x:Key="Surface2Brush" Color="#20201E" />
-                    <SolidColorBrush x:Key="Surface3Brush" Color="#272724" />
+                    <SolidColorBrush x:Key="Surface0Brush" Color="#131312" />
+                    <SolidColorBrush x:Key="Surface1Brush" Color="#1A1A18" />
+                    <SolidColorBrush x:Key="Surface2Brush" Color="#1F1F1D" />
+                    <SolidColorBrush x:Key="Surface3Brush" Color="#2B2B28" />
                     <SolidColorBrush x:Key="SurfaceRecessedBrush" Color="#171716" />
+                    <Color x:Key="InlineEditBgColor">#161615</Color>
+                    <SolidColorBrush x:Key="InlineEditBgBrush" Color="#161615" />
 
-                    <SolidColorBrush x:Key="InkPrimaryBrush" Color="#EAEAE7" />
-                    <SolidColorBrush x:Key="InkSecondaryBrush" Color="#A3A39E" />
-                    <SolidColorBrush x:Key="MutedTextBrush" Color="#73736E" />
+                    <SolidColorBrush x:Key="InkPrimaryBrush" Color="#EAE9E5" />
+                    <SolidColorBrush x:Key="InkSecondaryBrush" Color="#A6A5A0" />
+                    <SolidColorBrush x:Key="MutedTextBrush" Color="#75746F" />
 
-                    <SolidColorBrush x:Key="PrimaryCtaBgBrush" Color="#EAEAE7" />
+                    <SolidColorBrush x:Key="PrimaryCtaBgBrush" Color="#EAE9E5" />
                     <SolidColorBrush x:Key="PrimaryCtaHoverBrush" Color="#FFFFFF" />
                     <SolidColorBrush x:Key="PrimaryCtaFgBrush" Color="#1A1A19" />
+                    <SolidColorBrush x:Key="BusyCtaBgBrush" Color="#2B2B28" />
+                    <SolidColorBrush x:Key="BusyCtaHoverBrush" Color="#353531" />
 
-                    <SolidColorBrush x:Key="HumanAccentBrush" Color="#4ADE80" />
-                    <SolidColorBrush x:Key="HumanSoftBgBrush" Color="#1A4ADE80" />
-                    <SolidColorBrush x:Key="SuspectedAccentBrush" Color="#FBBF24" />
-                    <SolidColorBrush x:Key="SuspectedSoftBgBrush" Color="#1CFBBF24" />
-                    <SolidColorBrush x:Key="AiAccentBrush" Color="#F87171" />
-                    <SolidColorBrush x:Key="AiSoftBgBrush" Color="#1CF87171" />
+                    <SolidColorBrush x:Key="HumanAccentBrush" Color="#22C55E" />
+                    <SolidColorBrush x:Key="HumanSoftBgBrush" Color="#1C22C55E" />
+                    <SolidColorBrush x:Key="SuspectedAccentBrush" Color="#FACC15" />
+                    <SolidColorBrush x:Key="SuspectedSoftBgBrush" Color="#1EFACC15" />
+                    <SolidColorBrush x:Key="AiAccentBrush" Color="#FF5A52" />
+                    <SolidColorBrush x:Key="AiSoftBgBrush" Color="#1EFF5A52" />
                     <SolidColorBrush x:Key="ModifiedAccentBrush" Color="#60A5FA" />
 
-                    <SolidColorBrush x:Key="TrackBgBrush" Color="#2A2A27" />
+                    <SolidColorBrush x:Key="BubbleBgBrush" Color="#2B2B28" />
+                    <SolidColorBrush x:Key="BubbleFgBrush" Color="#F5F5F2" />
+                    <SolidColorBrush x:Key="BubbleMutedBrush" Color="#A6A5A0" />
 
-                    <SolidColorBrush x:Key="FocusVisualPrimaryBrush" Color="#40EAEAE7" />
-                    <SolidColorBrush x:Key="FocusVisualSecondaryBrush" Color="#18EAEAE7" />
+                    <SolidColorBrush x:Key="TrackBgBrush" Color="#2C2C29" />
+
+                    <!-- 暗色纸面上下缘渐隐遮罩 -->
+                    <LinearGradientBrush x:Key="PaperTopFadeBrush" StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#FF1F1F1D" Offset="0" />
+                        <GradientStop Color="#001F1F1D" Offset="1" />
+                    </LinearGradientBrush>
+                    <LinearGradientBrush x:Key="PaperBottomFadeBrush" StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#001F1F1D" Offset="0" />
+                        <GradientStop Color="#FF1F1F1D" Offset="1" />
+                    </LinearGradientBrush>
+
+                    <!-- 暗色下同步覆盖 WinUI 原生强调令牌 -->
+                    <SolidColorBrush x:Key="AccentFillColorDefaultBrush" Color="#EAE9E5" />
+                    <SolidColorBrush x:Key="AccentFillColorSecondaryBrush" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="AccentFillColorTertiaryBrush" Color="#D6D5D1" />
+                    <SolidColorBrush x:Key="AccentFillColorSelectedTextBackgroundBrush" Color="#44433E" />
+                    <SolidColorBrush x:Key="TextOnAccentFillColorPrimaryBrush" Color="#1A1A19" />
+                    <SolidColorBrush x:Key="TextOnAccentFillColorSecondaryBrush" Color="#40403C" />
+                    <SolidColorBrush x:Key="TextOnAccentFillColorSelectedTextBrush" Color="#FAFAF8" />
+                    <SolidColorBrush x:Key="AccentTextFillColorPrimaryBrush" Color="#EAE9E5" />
+                    <SolidColorBrush x:Key="AccentTextFillColorSecondaryBrush" Color="#D6D5D1" />
+                    <SolidColorBrush x:Key="AccentTextFillColorTertiaryBrush" Color="#A6A5A0" />
+
+                    <SolidColorBrush x:Key="FocusVisualPrimaryBrush" Color="#40EAE9E5" />
+                    <SolidColorBrush x:Key="FocusVisualSecondaryBrush" Color="#18EAE9E5" />
                     <SolidColorBrush x:Key="TextControlBorderBrush" Color="Transparent" />
                     <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="Transparent" />
                     <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="Transparent" />
-                    <SolidColorBrush x:Key="TextControlBackground" Color="#171716" />
-                    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#1E1E1C" />
-                    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#222220" />
-                    <SolidColorBrush x:Key="ToggleSwitchFillOn" Color="#EAEAE7" />
+                    <SolidColorBrush x:Key="TextControlBackground" Color="#252523" />
+                    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#2A2A27" />
+                    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#2E2E2B" />
+                    <SolidColorBrush x:Key="ToggleSwitchFillOn" Color="#EAE9E5" />
                     <SolidColorBrush x:Key="ToggleSwitchFillOnPointerOver" Color="#FFFFFF" />
-                    <SolidColorBrush x:Key="ToggleSwitchFillOnPressed" Color="#D6D6D2" />
+                    <SolidColorBrush x:Key="ToggleSwitchFillOnPressed" Color="#D6D5D1" />
                     <SolidColorBrush x:Key="ToggleSwitchKnobFillOn" Color="#1A1A19" />
                     <SolidColorBrush x:Key="ToggleSwitchKnobFillOnPointerOver" Color="#1A1A19" />
+
+                    <!-- 暗色轻量化滚动条 -->
+                    <SolidColorBrush x:Key="ScrollBarTrackFill" Color="Transparent" />
+                    <SolidColorBrush x:Key="ScrollBarTrackFillPointerOver" Color="Transparent" />
+                    <SolidColorBrush x:Key="ScrollBarTrackFillDisabled" Color="Transparent" />
+                    <SolidColorBrush x:Key="ScrollBarTrackStroke" Color="Transparent" />
+                    <SolidColorBrush x:Key="ScrollBarTrackStrokePointerOver" Color="Transparent" />
+                    <SolidColorBrush x:Key="ScrollBarThumbFill" Color="#28EAE9E5" />
+                    <SolidColorBrush x:Key="ScrollBarThumbFillPointerOver" Color="#44EAE9E5" />
+                    <SolidColorBrush x:Key="ScrollBarThumbFillPressed" Color="#60EAE9E5" />
+                    <SolidColorBrush x:Key="ScrollBarButtonArrowForeground" Color="#33EAE9E5" />
+                    <SolidColorBrush x:Key="ScrollBarButtonArrowForegroundPointerOver" Color="#66EAE9E5" />
+                    <SolidColorBrush x:Key="ScrollBarButtonArrowForegroundPressed" Color="#99EAE9E5" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
 
@@ -102,13 +188,14 @@
             <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
             <Thickness x:Key="ControlStrongStrokeColorDefaultThickness">0</Thickness>
 
-            <!-- 主操作单色强调按钮样式（开始检测、保存并重检等） -->
+            <!-- 主操作单色强调按钮样式（唯一检测入口、保存并重检等）：禁用态采用浅底弱字，克制清晰 -->
             <Style x:Key="MinimalPrimaryButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="{ThemeResource PrimaryCtaBgBrush}" />
                 <Setter Property="Foreground" Value="{ThemeResource PrimaryCtaFgBrush}" />
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="CornerRadius" Value="8" />
-                <Setter Property="Padding" Value="14,7" />
+                <Setter Property="Padding" Value="15,6" />
+                <Setter Property="MinHeight" Value="32" />
                 <Setter Property="FontSize" Value="13" />
                 <Setter Property="UseSystemFocusVisuals" Value="False" />
                 <Setter Property="Template">
@@ -128,29 +215,76 @@
                                         </VisualState>
                                         <VisualState x:Name="Pressed">
                                             <VisualState.Setters>
-                                                <Setter Target="BtnBorder.Opacity" Value="0.86" />
+                                                <Setter Target="BtnBorder.Background" Value="{ThemeResource PrimaryCtaHoverBrush}" />
+                                                <Setter Target="BtnBorder.Opacity" Value="0.88" />
                                             </VisualState.Setters>
                                         </VisualState>
                                         <VisualState x:Name="Disabled">
                                             <VisualState.Setters>
-                                                <Setter Target="BtnBorder.Opacity" Value="0.38" />
+                                                <Setter Target="BtnBorder.Background" Value="{ThemeResource Surface3Brush}" />
+                                                <Setter Target="BtnContent.Foreground" Value="{ThemeResource MutedTextBrush}" />
                                             </VisualState.Setters>
                                         </VisualState>
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <ContentPresenter x:Name="BtnContent"
+                                                  Foreground="{TemplateBinding Foreground}"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center" />
                             </Border>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Style>
 
-            <!-- 顶栏与次要操作透明底色按钮样式（悬停切至 Surface 3，无边框） -->
+            <!-- 检测进行中的柔化取消按钮样式（主按钮原位切换，无布局抖动） -->
+            <Style x:Key="BusyPrimaryButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="{ThemeResource BusyCtaBgBrush}" />
+                <Setter Property="Foreground" Value="{ThemeResource InkPrimaryBrush}" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="Padding" Value="15,6" />
+                <Setter Property="MinHeight" Value="32" />
+                <Setter Property="FontSize" Value="13" />
+                <Setter Property="UseSystemFocusVisuals" Value="False" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="BtnBorder"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="{TemplateBinding CornerRadius}"
+                                    Padding="{TemplateBinding Padding}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="PointerOver">
+                                            <VisualState.Setters>
+                                                <Setter Target="BtnBorder.Background" Value="{ThemeResource BusyCtaHoverBrush}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <VisualState.Setters>
+                                                <Setter Target="BtnBorder.Background" Value="{ThemeResource BusyCtaHoverBrush}" />
+                                                <Setter Target="BtnBorder.Opacity" Value="0.84" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <ContentPresenter Foreground="{TemplateBinding Foreground}"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- 次要操作透明底色按钮样式（悬停切至 Surface 3，无边框） -->
             <Style x:Key="GhostSurfaceButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="Foreground" Value="{ThemeResource InkPrimaryBrush}" />
                 <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="CornerRadius" Value="7" />
+                <Setter Property="CornerRadius" Value="8" />
                 <Setter Property="Padding" Value="10,6" />
                 <Setter Property="FontSize" Value="12.5" />
                 <Setter Property="UseSystemFocusVisuals" Value="False" />
@@ -177,16 +311,27 @@
                                         </VisualState>
                                         <VisualState x:Name="Disabled">
                                             <VisualState.Setters>
-                                                <Setter Target="BtnBorder.Opacity" Value="0.35" />
+                                                <Setter Target="BtnBorder.Opacity" Value="0.4" />
                                             </VisualState.Setters>
                                         </VisualState>
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <ContentPresenter Foreground="{TemplateBinding Foreground}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="Center" />
                             </Border>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+            </Style>
+
+            <!-- 32×32 方形图标按钮样式（纸面页眉文档操作、设置入口、风险跳转） -->
+            <Style x:Key="IconButtonStyle" TargetType="Button" BasedOn="{StaticResource GhostSurfaceButtonStyle}">
+                <Setter Property="Width" Value="32" />
+                <Setter Property="Height" Value="32" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="Foreground" Value="{ThemeResource InkSecondaryBrush}" />
             </Style>
 
             <!-- 段落行内上下文紧凑操作按钮样式 -->
@@ -195,18 +340,19 @@
                 <Setter Property="FontSize" Value="12" />
                 <Setter Property="CornerRadius" Value="6" />
                 <Setter Property="MinHeight" Value="26" />
+                <Setter Property="Foreground" Value="{ThemeResource InkSecondaryBrush}" />
             </Style>
 
             <!-- Surface 1 纯色面板容器样式（用于右侧诊断区块，无边框） -->
             <Style x:Key="Surface1PanelStyle" TargetType="Border">
                 <Setter Property="Background" Value="{ThemeResource Surface1Brush}" />
                 <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="CornerRadius" Value="12" />
-                <Setter Property="Padding" Value="16" />
+                <Setter Property="CornerRadius" Value="14" />
+                <Setter Property="Padding" Value="20,18" />
             </Style>
 
-            <!-- 右侧可点击占比筛选瓷砖按钮样式 -->
-            <Style x:Key="KpiTileButtonStyle" TargetType="Button">
+            <!-- 右侧占比图例行按钮样式（整行可点击筛选，悬停仅抬升底色） -->
+            <Style x:Key="LegendRowButtonStyle" TargetType="Button">
                 <Setter Property="Padding" Value="0" />
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="Background" Value="Transparent" />
@@ -217,18 +363,19 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <Grid x:Name="TileRoot" CornerRadius="{TemplateBinding CornerRadius}">
+                            <Grid x:Name="TileRoot" Background="Transparent" CornerRadius="{TemplateBinding CornerRadius}">
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup x:Name="CommonStates">
                                         <VisualState x:Name="Normal" />
                                         <VisualState x:Name="PointerOver">
                                             <VisualState.Setters>
-                                                <Setter Target="TileRoot.Opacity" Value="0.86" />
+                                                <Setter Target="TileRoot.Background" Value="{ThemeResource Surface3Brush}" />
                                             </VisualState.Setters>
                                         </VisualState>
                                         <VisualState x:Name="Pressed">
                                             <VisualState.Setters>
-                                                <Setter Target="TileRoot.Opacity" Value="0.72" />
+                                                <Setter Target="TileRoot.Background" Value="{ThemeResource Surface3Brush}" />
+                                                <Setter Target="TileRoot.Opacity" Value="0.8" />
                                             </VisualState.Setters>
                                         </VisualState>
                                     </VisualStateGroup>

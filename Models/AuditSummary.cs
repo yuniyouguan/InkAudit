@@ -44,6 +44,7 @@ public sealed class AuditSummary : INotifyPropertyChanged
             if (SetField(ref _hasResult, value))
             {
                 OnPropertyChanged(nameof(ResultVisibility));
+                OnPropertyChanged(nameof(ValueOpacity));
                 OnPropertyChanged(nameof(AiDeltaVisibility));
                 OnPropertyChanged(nameof(SegmentComparisonVisibility));
                 NotifyRatioChanged();
@@ -247,6 +248,9 @@ public sealed class AuditSummary : INotifyPropertyChanged
 
     /// <summary>结果区块可见性。</summary>
     public Visibility ResultVisibility => HasResult ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>主次数值不透明度（尚未产生结果时以低不透明度呈现占位符）。</summary>
+    public double ValueOpacity => HasResult ? 1.0 : 0.32;
 
     /// <summary>过期提醒文本可见性。</summary>
     public Visibility StaleVisibility => HasResult && IsStale ? Visibility.Visible : Visibility.Collapsed;

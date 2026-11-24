@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 左侧连续可编辑高亮纸面组件：页眉字数统计与文档图标组、RichEditBox 字符级红/黄/绿高亮、悬停占比气泡及底部轻提示 -->
+<UserControl
+    x:Class="InkAudit.Views.ManuscriptCanvasView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <!-- 纸面主容器（Surface 2 最亮层，支持直接拖入 .txt / .md 文件） -->
+    <Border
+        Background="{ThemeResource Surface2Brush}"
+        BorderThickness="0"
+        CornerRadius="14"
+        AllowDrop="True"
+        DragOver="OnEditorDragOver"
+        Drop="OnEditorDrop">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- 纸面页眉：左侧字数统计与分类高亮聚焦胶囊，右侧文档级图标操作 -->
+            <Grid Grid.Row="0" Padding="24,10,12,2" ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                    <TextBlock
+                        x:Name="ChapterStatsText"
+                        Text=""
+                        FontSize="12.5"
+                        FontWeight="{x:Bind TypeScale.BodyWeight, Mode=OneWay}"
+                        Typography.NumeralAlignment="Tabular"
+                        Foreground="{ThemeResource MutedTextBrush}"
+                        VerticalAlignment="Center"
+                        Visibility="Collapsed" />
+
+                    <!-- 当前激活的分类高亮聚焦胶囊（点击恢复全部三色高亮） -->
+                    <Button
+                        x:Name="ActiveFilterBanner"
+                        Style="{StaticResource GhostSurfaceButtonStyle}"
+                        Background="{ThemeResource Surface3Brush}"
+                        CornerRadius="12"
+                        Padding="10,3,8,3"
+                        Visibility="Collapsed"
+                        Click="OnResetFilterClick"
+                        ToolTipService.ToolTip="{x:Bind Strings.ActionClearFilter}">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <TextBlock
+                                x:Name="ActiveFilterLabel"
+                                Text=""
+                                FontSize="12"
+                                FontWeight="{x:Bind TypeScale.MediumWeight, Mode=OneWay}"
+                                Typography.NumeralAlignment="Tabular"
+                                VerticalAlignment="Center" />
+                            <FontIcon Glyph="&#xE711;" FontSize="9" Foreground="{ThemeResource MutedTextBrush}" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <!-- 文档级图标操作：粘贴覆盖、导入文件；有正文时追加导出报告、复制、清空 -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center">
+                    <Button x:Name="PasteButton" Style="{StaticResource IconButtonStyle}" Click="OnPasteClick" ToolTipService.ToolTip="{x:Bind Strings.ActionPaste}">
+                        <FontIcon Glyph="&#xE77F;" FontSize="14" />
+                    </Button>
+                    <Button x:Name="ImportButton" Style="{StaticResource IconButtonStyle}" Click="OnImportClick" ToolTipService.ToolTip="{x:Bind Strings.ActionImport}">
+                        <FontIcon Glyph="&#xE8E5;" FontSize="14" />
+                    </Button>
+
+                    <StackPanel x:Name="DocActionsPanel" Orientation="Horizontal" Spacing="2" Margin="10,0,0,0" Visibility="Collapsed">
+                        <Button
+                            x:Name="ExportReportButton"
+                            Style="{StaticResource IconButtonStyle}"
+                            Visibility="Collapsed"
+                            Click="OnExportReportClick"
+                            ToolTipService.ToolTip="{x:Bind Strings.ActionExportReport}">
+                            <Button.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="S" Modifiers="Control" />
+                            </Button.KeyboardAccelerators>
+                            <FontIcon Glyph="&#xEDE1;" FontSize="14" />
+                        </Button>
+                        <Button x:Name="CopyAllButton" Style="{StaticResource IconButtonStyle}" Click="OnCopyAllClick" ToolTipService.ToolTip="{x:Bind Strings.ActionCopy}">
+                            <FontIcon x:Name="CopyAllIcon" Glyph="&#xE8C8;" FontSize="14" RenderTransformOrigin="0.5,0.5">
+                                <FontIcon.RenderTransform>
+                                    <ScaleTransform x:Name="CopyCheckScale" ScaleX="1" ScaleY="1" />
+                                </FontIcon.RenderTransform>
+                            </FontIcon>
+                        </Button>
+                        <Button x:Name="ClearAllButton" Style="{StaticResource IconButtonStyle}" Click="OnClearAllClick" ToolTipService.ToolTip="{x:Bind Strings.ActionClear}">
+                            <FontIcon Glyph="&#xE74D;" FontSize="14" />
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+
+            <!-- 检测进行中：纸面顶缘 2px 不确定进度条 -->
+            <ProgressBar
+                x:Name="BusyProgressBar"
+                Grid.Row="0"
+                VerticalAlignment="Top"
+                Margin="14,0"
+                MinHeight="0"
+                Height="2"
+                IsIndeterminate="False"
+                Visibility="Collapsed"
+                Background="Transparent"
+                Foreground="{ThemeResource InkPrimaryBrush}" />
+
+            <!-- 连续可编辑高精度字符高亮画布 -->
+            <Grid x:Name="EditorHostGrid" Grid.Row="1">
+                <RichEditBox
+                    x:Name="ManuscriptEditor"
+                    AcceptsReturn="True"
+                    TextWrapping="Wrap"
+                    FontSize="14"
+                    FontWeight="{x:Bind TypeScale.BodyWeight, Mode=OneWay}"
+                    Foreground="{ThemeResource InkPrimaryBrush}"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Padding="24,12,24,36"
+                    MaxWidth="760"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    PlaceholderText="{x:Bind Strings.PlaceholderPaste}"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    Loaded="OnManuscriptEditorLoaded"
+                    TextChanged="OnManuscriptTextChanged"
+                    Paste="OnManuscriptPaste">
+                    <RichEditBox.OpacityTransition>
+                        <ScalarTransition Duration="0:0:0.25" />
+                    </RichEditBox.OpacityTransition>
+                    <RichEditBox.Resources>
+                        <SolidColorBrush x:Key="TextControlBackground" Color="Transparent" />
+                        <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="Transparent" />
+                        <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="Transparent" />
+                        <SolidColorBrush x:Key="TextControlBackgroundDisabled" Color="Transparent" />
+                        <SolidColorBrush x:Key="TextControlBorderBrush" Color="Transparent" />
+                        <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="Transparent" />
+                        <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="Transparent" />
+                        <SolidColorBrush x:Key="TextControlBorderBrushDisabled" Color="Transparent" />
+                    </RichEditBox.Resources>
+                </RichEditBox>
+
+                <!-- 纸面上下缘柔化渐隐遮罩 -->
+                <Border
+                    Height="12"
+                    VerticalAlignment="Top"
+                    Background="{ThemeResource PaperTopFadeBrush}"
+                    IsHitTestVisible="False" />
+                <Border
+                    Height="28"
+                    VerticalAlignment="Bottom"
+                    CornerRadius="0,0,14,14"
+                    Background="{ThemeResource PaperBottomFadeBrush}"
+                    IsHitTestVisible="False" />
+
+                <!-- 鼠标悬停片段时浮现的精准占比气泡覆盖层（独立 Canvas 定位，不拦截鼠标与点击） -->
+                <Canvas x:Name="HoverOverlayCanvas" IsHitTestVisible="False">
+                    <Border
+                        x:Name="SegmentHoverBubble"
+                        Background="{ThemeResource BubbleBgBrush}"
+                        CornerRadius="10"
+                        Padding="12,8"
+                        IsHitTestVisible="False"
+                        Visibility="Collapsed">
+                        <StackPanel Spacing="3">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Ellipse x:Name="HoverBubbleDot" Width="7" Height="7" VerticalAlignment="Center" />
+                                <TextBlock
+                                    x:Name="HoverBubbleLabel"
+                                    Text=""
+                                    FontSize="12.5"
+                                    FontWeight="{x:Bind TypeScale.MediumWeight, Mode=OneWay}"
+                                    Foreground="{ThemeResource BubbleFgBrush}"
+                                    VerticalAlignment="Center" />
+                                <TextBlock
+                                    x:Name="HoverBubbleMeta"
+                                    Text=""
+                                    FontSize="11.5"
+                                    Typography.NumeralAlignment="Tabular"
+                                    Foreground="{ThemeResource BubbleMutedBrush}"
+                                    VerticalAlignment="Center" />
+                            </StackPanel>
+                            <TextBlock
+                                x:Name="HoverBubbleRatios"
+                                Text=""
+                                FontSize="12"
+                                FontWeight="{x:Bind TypeScale.MediumWeight, Mode=OneWay}"
+                                Typography.NumeralAlignment="Tabular"
+                                Foreground="{ThemeResource BubbleFgBrush}"
+                                Margin="15,0,0,0" />
+                        </StackPanel>
+                    </Border>
+                </Canvas>
+
+                <!-- 底部居中反色轻提示胶囊（弹性出现，2.5 秒后自动淡出） -->
+                <Border
+                    x:Name="ActionToastPill"
+                    Background="{ThemeResource PrimaryCtaBgBrush}"
+                    CornerRadius="18"
+                    Padding="14,8"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Margin="0,0,0,24"
+                    Opacity="0"
+                    IsHitTestVisible="False"
+                    Visibility="Collapsed"
+                    RenderTransformOrigin="0.5,0.5">
+                    <Border.RenderTransform>
+                        <ScaleTransform x:Name="ToastScaleTransform" ScaleX="0.8" ScaleY="0.8" />
+                    </Border.RenderTransform>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon Glyph="&#xE73E;" FontSize="12" Foreground="{ThemeResource PrimaryCtaFgBrush}" VerticalAlignment="Center" />
+                        <TextBlock
+                            x:Name="ActionToastText"
+                            Text=""
+                            FontSize="12.5"
+                            FontWeight="{x:Bind TypeScale.MediumWeight, Mode=OneWay}"
+                            Typography.NumeralAlignment="Tabular"
+                            Foreground="{ThemeResource PrimaryCtaFgBrush}"
+                            VerticalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

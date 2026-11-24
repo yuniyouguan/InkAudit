@@ -9,7 +9,7 @@ using System.Threading;
 namespace InkAudit.Views;
 
 /// <summary>
-/// 应用设置对话框，提供 API Key 鉴权配置、连通性验证、检测策略、主题与语言设置。
+/// 应用设置对话框，提供 API Key 鉴权配置、连通性验证、全文复核、高亮开关与外观主题设置。
 /// </summary>
 public sealed partial class SettingsDialog : ContentDialog
 {
@@ -46,8 +46,6 @@ public sealed partial class SettingsDialog : ContentDialog
         {
             ApiKey = currentSettings.ApiKey,
             EndpointUrl = currentSettings.EndpointUrl,
-            EnableShortParagraphSkip = currentSettings.EnableShortParagraphSkip,
-            ShortParagraphThreshold = currentSettings.ShortParagraphThreshold,
             EnableFullTextMergeCheck = currentSettings.EnableFullTextMergeCheck,
             ShowHeatmapTint = currentSettings.ShowHeatmapTint,
             ThemeMode = currentSettings.ThemeMode
@@ -55,9 +53,6 @@ public sealed partial class SettingsDialog : ContentDialog
 
         ApiKeyBox.Password = ResultSettings.ApiKey;
         EndpointBox.Text = ResultSettings.EndpointUrl;
-        ShortSkipToggle.IsOn = ResultSettings.EnableShortParagraphSkip;
-        ShortThresholdBox.Value = ResultSettings.ShortParagraphThreshold;
-        ShortThresholdBox.IsEnabled = ResultSettings.EnableShortParagraphSkip;
         FullMergeToggle.IsOn = ResultSettings.EnableFullTextMergeCheck;
         HeatmapTintSettingToggle.IsOn = ResultSettings.ShowHeatmapTint;
 
@@ -74,19 +69,6 @@ public sealed partial class SettingsDialog : ContentDialog
             _testCts?.Cancel();
             _testCts?.Dispose();
         };
-    }
-
-    /// <summary>
-    /// 响应短段跳过开关切换，联动启用或禁用字数阈值输入框。
-    /// </summary>
-    /// <param name="sender">触发事件的开关控件。</param>
-    /// <param name="e">路由事件参数。</param>
-    private void OnShortSkipToggled(object sender, RoutedEventArgs e)
-    {
-        if (ShortThresholdBox is not null)
-        {
-            ShortThresholdBox.IsEnabled = ShortSkipToggle.IsOn;
-        }
     }
 
     /// <summary>
@@ -144,10 +126,6 @@ public sealed partial class SettingsDialog : ContentDialog
         ResultSettings.EndpointUrl = string.IsNullOrWhiteSpace(EndpointBox.Text)
             ? AppSettings.DefaultEndpointUrl
             : EndpointBox.Text.Trim();
-        ResultSettings.EnableShortParagraphSkip = ShortSkipToggle.IsOn;
-        ResultSettings.ShortParagraphThreshold = double.IsNaN(ShortThresholdBox.Value)
-            ? 15
-            : Math.Clamp((int)Math.Round(ShortThresholdBox.Value), 0, 200);
         ResultSettings.EnableFullTextMergeCheck = FullMergeToggle.IsOn;
         ResultSettings.ShowHeatmapTint = HeatmapTintSettingToggle.IsOn;
 

@@ -74,13 +74,13 @@
   <data name="PlaceholderPaste" xml:space="preserve"><value>Paste text…</value></data>
   <data name="LabelFullTextAudit" xml:space="preserve"><value>Full Text</value></data>
   <data name="LabelMergeCheck" xml:space="preserve"><value>Merge</value></data>
-  <data name="LabelStaleNotice" xml:space="preserve"><value>Edited — re-audit needed</value></data>
+  <data name="LabelStaleNotice" xml:space="preserve"><value>Text edited — re-audit needed</value></data>
   <data name="LabelHuman" xml:space="preserve"><value>Human</value></data>
   <data name="LabelSuspected" xml:space="preserve"><value>Suspected</value></data>
   <data name="LabelAi" xml:space="preserve"><value>AI</value></data>
   <data name="LabelConfidence" xml:space="preserve"><value>Confidence</value></data>
   <data name="LabelRiskRatio" xml:space="preserve"><value>Risk Ratio</value></data>
-  <data name="LabelDistribution" xml:space="preserve"><value>Paragraphs</value></data>
+  <data name="LabelDistribution" xml:space="preserve"><value>Segments</value></data>
   <data name="LabelSkipped" xml:space="preserve"><value>Skipped</value></data>
   <data name="LabelModified" xml:space="preserve"><value>Edited</value></data>
   <data name="LabelFailed" xml:space="preserve"><value>Failed</value></data>
@@ -91,7 +91,7 @@
   <data name="SettingsEndpoint" xml:space="preserve"><value>Endpoint</value></data>
   <data name="SettingsSkipShort" xml:space="preserve"><value>Skip short (chars)</value></data>
   <data name="SettingsFullMerge" xml:space="preserve"><value>Full-text merge check</value></data>
-  <data name="SettingsHeatmapTint" xml:space="preserve"><value>Highlight risky rows</value></data>
+  <data name="SettingsHeatmapTint" xml:space="preserve"><value>Highlight text spans</value></data>
   <data name="SettingsTheme" xml:space="preserve"><value>Theme</value></data>
   <data name="ThemeDefault" xml:space="preserve"><value>System</value></data>
   <data name="ThemeLight" xml:space="preserve"><value>Light</value></data>
@@ -122,4 +122,41 @@
   <data name="FormatNetworkError" xml:space="preserve"><value>Network error: {0}</value></data>
   <data name="FormatJsonParseError" xml:space="preserve"><value>Invalid response JSON: {0}</value></data>
   <data name="FormatHttpError" xml:space="preserve"><value>HTTP {0}{1}</value></data>
+  <data name="ActionClear" xml:space="preserve"><value>Clear</value></data>
+  <data name="ActionReaudit" xml:space="preserve"><value>Re-audit</value></data>
+  <data name="ActionFullReaudit" xml:space="preserve"><value>Re-audit Full Text</value></data>
+  <data name="ActionMergeReview" xml:space="preserve"><value>Review Full Text</value></data>
+  <data name="ActionPrevRisk" xml:space="preserve"><value>Previous Risk (Alt+↑)</value></data>
+  <data name="ActionNextRisk" xml:space="preserve"><value>Next Risk (Alt+↓)</value></data>
+  <data name="LabelAiRatio" xml:space="preserve"><value>AI Ratio</value></data>
+  <data name="FormatRecheckCount" xml:space="preserve"><value>Recheck {0}</value></data>
+  <data name="FormatAuditShortcut" xml:space="preserve"><value>{0} (Ctrl+Enter)</value></data>
+  <data name="TooltipCancelAudit" xml:space="preserve"><value>Cancel Audit (Esc)</value></data>
+  <data name="FormatSegmentTooltip" xml:space="preserve"><value>{0} · {1} · AI {2} / Human {3}</value></data>
+  <data name="FormatSegmentBubbleRatios" xml:space="preserve"><value>AI {0} · Human {1}</value></data>
+  <data name="FormatSegmentCharCount" xml:space="preserve"><value>{0} chars</value></data>
+  <data name="ActionExportReport" xml:space="preserve"><value>Export Markdown Report (Ctrl+S)</value></data>
+  <data name="ToastReportExported" xml:space="preserve"><value>Report exported</value></data>
+  <data name="ReportFileNamePrefix" xml:space="preserve"><value>InkAudit-Report</value></data>
+  <data name="ReportTitle" xml:space="preserve"><value>InkAudit AI Detection Report</value></data>
+  <data name="ReportMetaTime" xml:space="preserve"><value>Exported</value></data>
+  <data name="ReportMetaLength" xml:space="preserve"><value>Text Stats</value></data>
+  <data name="ReportMetaMode" xml:space="preserve"><value>Audit Mode</value></data>
+  <data name="ReportMetaTokens" xml:space="preserve"><value>Tokens Used</value></data>
+  <data name="ReportModeMergedAndSegments" xml:space="preserve"><value>Full-Text Merge + Segment Localization</value></data>
+  <data name="ReportModeMergedOnly" xml:space="preserve"><value>Full-Text Merge Only</value></data>
+  <data name="ReportModeSegmentsOnly" xml:space="preserve"><value>Segment Localization</value></data>
+  <data name="ReportSectionSummary" xml:space="preserve"><value>Summary</value></data>
+  <data name="ReportSectionSegments" xml:space="preserve"><value>Segment Overview</value></data>
+  <data name="ReportSectionDetails" xml:space="preserve"><value>Annotated Segments</value></data>
+  <data name="ReportSectionFullText" xml:space="preserve"><value>Audited Text</value></data>
+  <data name="ReportColMetric" xml:space="preserve"><value>Metric</value></data>
+  <data name="ReportColValue" xml:space="preserve"><value>Value</value></data>
+  <data name="ReportColIndex" xml:space="preserve"><value>#</value></data>
+  <data name="ReportColLabel" xml:space="preserve"><value>Label</value></data>
+  <data name="ReportColAiProb" xml:space="preserve"><value>AI Prob</value></data>
+  <data name="ReportColHumanProb" xml:space="preserve"><value>Human Prob</value></data>
+  <data name="ReportColChars" xml:space="preserve"><value>Chars</value></data>
+  <data name="ReportColRange" xml:space="preserve"><value>Range</value></data>
+  <data name="ReportRowSegmentCompare" xml:space="preserve"><value>Segment Ref (Human / Suspected / AI)</value></data>
 </root>

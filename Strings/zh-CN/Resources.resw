@@ -74,13 +74,13 @@
   <data name="PlaceholderPaste" xml:space="preserve"><value>粘贴正文…</value></data>
   <data name="LabelFullTextAudit" xml:space="preserve"><value>全文检测</value></data>
   <data name="LabelMergeCheck" xml:space="preserve"><value>合并复核</value></data>
-  <data name="LabelStaleNotice" xml:space="preserve"><value>段落已改，需重检</value></data>
+  <data name="LabelStaleNotice" xml:space="preserve"><value>正文已改，需重检</value></data>
   <data name="LabelHuman" xml:space="preserve"><value>人工</value></data>
   <data name="LabelSuspected" xml:space="preserve"><value>疑似</value></data>
   <data name="LabelAi" xml:space="preserve"><value>AI</value></data>
   <data name="LabelConfidence" xml:space="preserve"><value>置信度</value></data>
   <data name="LabelRiskRatio" xml:space="preserve"><value>风险占比</value></data>
-  <data name="LabelDistribution" xml:space="preserve"><value>段落分布</value></data>
+  <data name="LabelDistribution" xml:space="preserve"><value>片段分布</value></data>
   <data name="LabelSkipped" xml:space="preserve"><value>跳过</value></data>
   <data name="LabelModified" xml:space="preserve"><value>已改</value></data>
   <data name="LabelFailed" xml:space="preserve"><value>失败</value></data>
@@ -91,7 +91,7 @@
   <data name="SettingsEndpoint" xml:space="preserve"><value>接口地址</value></data>
   <data name="SettingsSkipShort" xml:space="preserve"><value>跳过短段（字数）</value></data>
   <data name="SettingsFullMerge" xml:space="preserve"><value>全文合并复核</value></data>
-  <data name="SettingsHeatmapTint" xml:space="preserve"><value>高风险段落底色</value></data>
+  <data name="SettingsHeatmapTint" xml:space="preserve"><value>文字背景高亮</value></data>
   <data name="SettingsTheme" xml:space="preserve"><value>主题</value></data>
   <data name="ThemeDefault" xml:space="preserve"><value>跟随系统</value></data>
   <data name="ThemeLight" xml:space="preserve"><value>浅色</value></data>
@@ -122,4 +122,41 @@
   <data name="FormatNetworkError" xml:space="preserve"><value>网络连接失败：{0}</value></data>
   <data name="FormatJsonParseError" xml:space="preserve"><value>返回数据解析失败：{0}</value></data>
   <data name="FormatHttpError" xml:space="preserve"><value>请求失败（HTTP {0}）{1}</value></data>
+  <data name="ActionClear" xml:space="preserve"><value>清空</value></data>
+  <data name="ActionReaudit" xml:space="preserve"><value>重新检测</value></data>
+  <data name="ActionFullReaudit" xml:space="preserve"><value>重新检测全文</value></data>
+  <data name="ActionMergeReview" xml:space="preserve"><value>复核全文</value></data>
+  <data name="ActionPrevRisk" xml:space="preserve"><value>上一处风险片段 (Alt+↑)</value></data>
+  <data name="ActionNextRisk" xml:space="preserve"><value>下一处风险片段 (Alt+↓)</value></data>
+  <data name="LabelAiRatio" xml:space="preserve"><value>AI 占比</value></data>
+  <data name="FormatRecheckCount" xml:space="preserve"><value>重检 {0} 段</value></data>
+  <data name="FormatAuditShortcut" xml:space="preserve"><value>{0} (Ctrl+Enter)</value></data>
+  <data name="TooltipCancelAudit" xml:space="preserve"><value>取消检测 (Esc)</value></data>
+  <data name="FormatSegmentTooltip" xml:space="preserve"><value>{0} · {1} · AI {2} / 人工 {3}</value></data>
+  <data name="FormatSegmentBubbleRatios" xml:space="preserve"><value>AI {0} · 人工 {1}</value></data>
+  <data name="FormatSegmentCharCount" xml:space="preserve"><value>{0} 字</value></data>
+  <data name="ActionExportReport" xml:space="preserve"><value>导出 Markdown 报告 (Ctrl+S)</value></data>
+  <data name="ToastReportExported" xml:space="preserve"><value>报告已导出</value></data>
+  <data name="ReportFileNamePrefix" xml:space="preserve"><value>墨鉴检测报告</value></data>
+  <data name="ReportTitle" xml:space="preserve"><value>墨鉴 AI 文本检测报告</value></data>
+  <data name="ReportMetaTime" xml:space="preserve"><value>导出时间</value></data>
+  <data name="ReportMetaLength" xml:space="preserve"><value>正文统计</value></data>
+  <data name="ReportMetaMode" xml:space="preserve"><value>检测方式</value></data>
+  <data name="ReportMetaTokens" xml:space="preserve"><value>消耗 Token</value></data>
+  <data name="ReportModeMergedAndSegments" xml:space="preserve"><value>全文合并复核 + 切片定位</value></data>
+  <data name="ReportModeMergedOnly" xml:space="preserve"><value>仅全文合并复核</value></data>
+  <data name="ReportModeSegmentsOnly" xml:space="preserve"><value>切片定位</value></data>
+  <data name="ReportSectionSummary" xml:space="preserve"><value>全文总览</value></data>
+  <data name="ReportSectionSegments" xml:space="preserve"><value>片段明细</value></data>
+  <data name="ReportSectionDetails" xml:space="preserve"><value>原文切片标注</value></data>
+  <data name="ReportSectionFullText" xml:space="preserve"><value>检测正文</value></data>
+  <data name="ReportColMetric" xml:space="preserve"><value>指标</value></data>
+  <data name="ReportColValue" xml:space="preserve"><value>数值</value></data>
+  <data name="ReportColIndex" xml:space="preserve"><value>序号</value></data>
+  <data name="ReportColLabel" xml:space="preserve"><value>判定</value></data>
+  <data name="ReportColAiProb" xml:space="preserve"><value>AI 概率</value></data>
+  <data name="ReportColHumanProb" xml:space="preserve"><value>人工概率</value></data>
+  <data name="ReportColChars" xml:space="preserve"><value>字数</value></data>
+  <data name="ReportColRange" xml:space="preserve"><value>字符区间</value></data>
+  <data name="ReportRowSegmentCompare" xml:space="preserve"><value>逐段对照（人工 / 疑似 / AI）</value></data>
 </root>
