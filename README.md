@@ -69,6 +69,16 @@ dotnet publish -c Release -p:Platform=x64 -p:PublishProfile=win-x64
 
 发布产物输出至 `bin\Release\net8.0-windows10.0.19041.0\win-x64\publish\`，已完整内置 `.NET 8` 与 `Windows App SDK` 运行时，将整个目录打包分发后双击 `InkAudit.exe` 即可运行。
 
+### 构建 Windows x64 安装包
+
+在已安装 WiX Toolset 3.14 的 Windows 上，从仓库根目录运行以下 PowerShell 7 命令。
+
+```powershell
+./installer/Build.ps1 -WixBin 'C:\Program Files (x86)\WiX Toolset v3.14\bin'
+```
+
+脚本在 `bin/installer/v<版本>/` 生成中文 MSI 和同版本便携 ZIP。MSI 安装时会在桌面与开始菜单各创建一个“墨鉴”快捷方式。已安装旧版 MSI 的用户可直接运行新版安装包升级。
+
 ## 接口配置
 
 首次运行后点击右上角 **设置** 图标：

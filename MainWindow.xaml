@@ -12,6 +12,7 @@
 
     <Grid x:Name="RootGrid"
           Background="{ThemeResource Surface0Brush}"
+          KeyboardAcceleratorPlacementMode="Hidden"
           ActualThemeChanged="OnRootActualThemeChanged">
         <Grid.KeyboardAccelerators>
             <KeyboardAccelerator Key="Escape" Invoked="OnEscapeAcceleratorInvoked" />

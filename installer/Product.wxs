@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Product Id="*" Name="墨鉴" Language="2052" Codepage="936"
+             Version="$(var.ProductVersion)" Manufacturer="yuniyouguan" UpgradeCode="$(var.UpgradeCode)">
+        <Package InstallerVersion="500" InstallScope="perMachine" Compressed="yes" SummaryCodepage="936" />
+        <MajorUpgrade Schedule="afterInstallInitialize" DowngradeErrorMessage="$(var.VersionConflictMessage)" />
+        <MediaTemplate EmbedCab="yes" CompressionLevel="high" MaximumUncompressedMediaSize="512" />
+        <Icon Id="InkAudit.ico" SourceFile="$(var.PublishDir)\Assets\AppIcon.ico" />
+        <Property Id="ARPPRODUCTICON" Value="InkAudit.ico" />
+
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFiles64Folder">
+                <Directory Id="INSTALLFOLDER" Name="InkAudit">
+                    <Component Id="InkAuditLauncher" Guid="*">
+                        <File Id="InkAuditExe" Source="$(var.PublishDir)\InkAudit.exe" KeyPath="yes">
+                            <Shortcut Id="InkAuditStartMenu" Directory="ProgramMenuFolder" Name="墨鉴"
+                                      Advertise="yes" WorkingDirectory="INSTALLFOLDER" Icon="InkAudit.ico" />
+                            <Shortcut Id="InkAuditDesktop" Directory="DesktopFolder" Name="墨鉴"
+                                      Advertise="yes" WorkingDirectory="INSTALLFOLDER" Icon="InkAudit.ico" />
+                        </File>
+                    </Component>
+                </Directory>
+            </Directory>
+            <Directory Id="ProgramMenuFolder" />
+            <Directory Id="DesktopFolder" />
+        </Directory>
+        <Feature Id="InkAudit" Title="墨鉴" Level="1">
+            <ComponentRef Id="InkAuditLauncher" />
+            <ComponentGroupRef Id="PublishedFiles" />
+        </Feature>
+        <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+        <UIRef Id="WixUI_InstallDir" />
+        <WixVariable Id="WixUILicenseRtf" Value="$(var.LicenseRtf)" />
+    </Product>
+</Wix>
