@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "InkAudit (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "InkAudit (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

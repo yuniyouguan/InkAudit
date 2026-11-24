@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 墨鉴（InkAudit）全局应用资源字典：定义浅色/暗色中性微色阶 Surface 0~3、语义色及核心按钮/容器样式 -->
+<Application
+    x:Class="InkAudit.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:InkAudit">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- 浅色与暗色主题色阶表：采用 1.5%~2.5% 微明度递增替代 1px 边框，全站禁用纯黑 #000 -->
+            <ResourceDictionary.ThemeDictionaries>
+                <!-- 浅色主题资源 -->
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="Surface0Brush" Color="#F4F4F3" />
+                    <SolidColorBrush x:Key="Surface1Brush" Color="#F9F9F8" />
+                    <SolidColorBrush x:Key="Surface2Brush" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="Surface3Brush" Color="#ECECE9" />
+                    <SolidColorBrush x:Key="SurfaceRecessedBrush" Color="#EFEFED" />
+
+                    <SolidColorBrush x:Key="InkPrimaryBrush" Color="#1A1A19" />
+                    <SolidColorBrush x:Key="InkSecondaryBrush" Color="#595956" />
+                    <SolidColorBrush x:Key="MutedTextBrush" Color="#8C8C87" />
+
+                    <SolidColorBrush x:Key="PrimaryCtaBgBrush" Color="#1A1A19" />
+                    <SolidColorBrush x:Key="PrimaryCtaHoverBrush" Color="#2E2E2C" />
+                    <SolidColorBrush x:Key="PrimaryCtaFgBrush" Color="#F9F9F8" />
+
+                    <SolidColorBrush x:Key="HumanAccentBrush" Color="#15803D" />
+                    <SolidColorBrush x:Key="HumanSoftBgBrush" Color="#1215803D" />
+                    <SolidColorBrush x:Key="SuspectedAccentBrush" Color="#B45309" />
+                    <SolidColorBrush x:Key="SuspectedSoftBgBrush" Color="#14D97706" />
+                    <SolidColorBrush x:Key="AiAccentBrush" Color="#DC2626" />
+                    <SolidColorBrush x:Key="AiSoftBgBrush" Color="#12DC2626" />
+                    <SolidColorBrush x:Key="ModifiedAccentBrush" Color="#2563EB" />
+
+                    <SolidColorBrush x:Key="TrackBgBrush" Color="#E7E7E4" />
+
+                    <!-- 覆盖默认亮蓝色聚焦边框与开关颜色，统一为克制中性近黑色系 -->
+                    <SolidColorBrush x:Key="FocusVisualPrimaryBrush" Color="#331A1A19" />
+                    <SolidColorBrush x:Key="FocusVisualSecondaryBrush" Color="#141A1A19" />
+                    <SolidColorBrush x:Key="TextControlBorderBrush" Color="Transparent" />
+                    <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="Transparent" />
+                    <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="Transparent" />
+                    <SolidColorBrush x:Key="TextControlBackground" Color="#EFEFED" />
+                    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#EBEBE8" />
+                    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="ToggleSwitchFillOn" Color="#1A1A19" />
+                    <SolidColorBrush x:Key="ToggleSwitchFillOnPointerOver" Color="#30302E" />
+                    <SolidColorBrush x:Key="ToggleSwitchFillOnPressed" Color="#3F3F3C" />
+                    <SolidColorBrush x:Key="ToggleSwitchKnobFillOn" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="ToggleSwitchKnobFillOnPointerOver" Color="#FFFFFF" />
+                </ResourceDictionary>
+
+                <!-- 暗色主题资源 -->
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="Surface0Brush" Color="#141413" />
+                    <SolidColorBrush x:Key="Surface1Brush" Color="#1A1A19" />
+                    <SolidColorBrush x:Key="Surface2Brush" Color="#20201E" />
+                    <SolidColorBrush x:Key="Surface3Brush" Color="#272724" />
+                    <SolidColorBrush x:Key="SurfaceRecessedBrush" Color="#171716" />
+
+                    <SolidColorBrush x:Key="InkPrimaryBrush" Color="#EAEAE7" />
+                    <SolidColorBrush x:Key="InkSecondaryBrush" Color="#A3A39E" />
+                    <SolidColorBrush x:Key="MutedTextBrush" Color="#73736E" />
+
+                    <SolidColorBrush x:Key="PrimaryCtaBgBrush" Color="#EAEAE7" />
+                    <SolidColorBrush x:Key="PrimaryCtaHoverBrush" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="PrimaryCtaFgBrush" Color="#1A1A19" />
+
+                    <SolidColorBrush x:Key="HumanAccentBrush" Color="#4ADE80" />
+                    <SolidColorBrush x:Key="HumanSoftBgBrush" Color="#1A4ADE80" />
+                    <SolidColorBrush x:Key="SuspectedAccentBrush" Color="#FBBF24" />
+                    <SolidColorBrush x:Key="SuspectedSoftBgBrush" Color="#1CFBBF24" />
+                    <SolidColorBrush x:Key="AiAccentBrush" Color="#F87171" />
+                    <SolidColorBrush x:Key="AiSoftBgBrush" Color="#1CF87171" />
+                    <SolidColorBrush x:Key="ModifiedAccentBrush" Color="#60A5FA" />
+
+                    <SolidColorBrush x:Key="TrackBgBrush" Color="#2A2A27" />
+
+                    <SolidColorBrush x:Key="FocusVisualPrimaryBrush" Color="#40EAEAE7" />
+                    <SolidColorBrush x:Key="FocusVisualSecondaryBrush" Color="#18EAEAE7" />
+                    <SolidColorBrush x:Key="TextControlBorderBrush" Color="Transparent" />
+                    <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="Transparent" />
+                    <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="Transparent" />
+                    <SolidColorBrush x:Key="TextControlBackground" Color="#171716" />
+                    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#1E1E1C" />
+                    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#222220" />
+                    <SolidColorBrush x:Key="ToggleSwitchFillOn" Color="#EAEAE7" />
+                    <SolidColorBrush x:Key="ToggleSwitchFillOnPointerOver" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="ToggleSwitchFillOnPressed" Color="#D6D6D2" />
+                    <SolidColorBrush x:Key="ToggleSwitchKnobFillOn" Color="#1A1A19" />
+                    <SolidColorBrush x:Key="ToggleSwitchKnobFillOnPointerOver" Color="#1A1A19" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+
+            <!-- 全局取消输入控件默认 1px 描边 -->
+            <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+            <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+            <Thickness x:Key="ControlStrongStrokeColorDefaultThickness">0</Thickness>
+
+            <!-- 主操作单色强调按钮样式（开始检测、保存并重检等） -->
+            <Style x:Key="MinimalPrimaryButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="{ThemeResource PrimaryCtaBgBrush}" />
+                <Setter Property="Foreground" Value="{ThemeResource PrimaryCtaFgBrush}" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="Padding" Value="14,7" />
+                <Setter Property="FontSize" Value="13" />
+                <Setter Property="UseSystemFocusVisuals" Value="False" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="BtnBorder"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="{TemplateBinding CornerRadius}"
+                                    Padding="{TemplateBinding Padding}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="PointerOver">
+                                            <VisualState.Setters>
+                                                <Setter Target="BtnBorder.Background" Value="{ThemeResource PrimaryCtaHoverBrush}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <VisualState.Setters>
+                                                <Setter Target="BtnBorder.Opacity" Value="0.86" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <VisualState.Setters>
+                                                <Setter Target="BtnBorder.Opacity" Value="0.38" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- 顶栏与次要操作透明底色按钮样式（悬停切至 Surface 3，无边框） -->
+            <Style x:Key="GhostSurfaceButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="{ThemeResource InkPrimaryBrush}" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="CornerRadius" Value="7" />
+                <Setter Property="Padding" Value="10,6" />
+                <Setter Property="FontSize" Value="12.5" />
+                <Setter Property="UseSystemFocusVisuals" Value="False" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="BtnBorder"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="{TemplateBinding CornerRadius}"
+                                    Padding="{TemplateBinding Padding}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="PointerOver">
+                                            <VisualState.Setters>
+                                                <Setter Target="BtnBorder.Background" Value="{ThemeResource Surface3Brush}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <VisualState.Setters>
+                                                <Setter Target="BtnBorder.Background" Value="{ThemeResource Surface3Brush}" />
+                                                <Setter Target="BtnBorder.Opacity" Value="0.8" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <VisualState.Setters>
+                                                <Setter Target="BtnBorder.Opacity" Value="0.35" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- 段落行内上下文紧凑操作按钮样式 -->
+            <Style x:Key="RowActionButtonStyle" TargetType="Button" BasedOn="{StaticResource GhostSurfaceButtonStyle}">
+                <Setter Property="Padding" Value="8,4" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="CornerRadius" Value="6" />
+                <Setter Property="MinHeight" Value="26" />
+            </Style>
+
+            <!-- Surface 1 纯色面板容器样式（用于右侧诊断区块，无边框） -->
+            <Style x:Key="Surface1PanelStyle" TargetType="Border">
+                <Setter Property="Background" Value="{ThemeResource Surface1Brush}" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="CornerRadius" Value="12" />
+                <Setter Property="Padding" Value="16" />
+            </Style>
+
+            <!-- 右侧可点击占比筛选瓷砖按钮样式 -->
+            <Style x:Key="KpiTileButtonStyle" TargetType="Button">
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="UseSystemFocusVisuals" Value="False" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid x:Name="TileRoot" CornerRadius="{TemplateBinding CornerRadius}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="PointerOver">
+                                            <VisualState.Setters>
+                                                <Setter Target="TileRoot.Opacity" Value="0.86" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <VisualState.Setters>
+                                                <Setter Target="TileRoot.Opacity" Value="0.72" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

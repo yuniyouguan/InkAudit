@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppTitle" xml:space="preserve"><value>墨鉴</value></data>
+  <data name="ActionPaste" xml:space="preserve"><value>粘贴</value></data>
+  <data name="ActionImport" xml:space="preserve"><value>导入</value></data>
+  <data name="ActionEdit" xml:space="preserve"><value>编辑</value></data>
+  <data name="ActionCopy" xml:space="preserve"><value>复制</value></data>
+  <data name="ActionCancel" xml:space="preserve"><value>取消</value></data>
+  <data name="ActionApply" xml:space="preserve"><value>应用</value></data>
+  <data name="ActionSave" xml:space="preserve"><value>保存</value></data>
+  <data name="ActionSaveAndRecheck" xml:space="preserve"><value>保存并重检</value></data>
+  <data name="ActionClearFilter" xml:space="preserve"><value>清除</value></data>
+  <data name="ActionStartAudit" xml:space="preserve"><value>开始检测</value></data>
+  <data name="ActionPasteAndAudit" xml:space="preserve"><value>粘贴并检测</value></data>
+  <data name="ActionMergedOnly" xml:space="preserve"><value>仅全文合并复核</value></data>
+  <data name="ActionRecheckModified" xml:space="preserve"><value>仅重检已改段落</value></data>
+  <data name="ActionSettings" xml:space="preserve"><value>设置</value></data>
+  <data name="ActionTest" xml:space="preserve"><value>测试</value></data>
+  <data name="PlaceholderPaste" xml:space="preserve"><value>粘贴正文…</value></data>
+  <data name="LabelFullTextAudit" xml:space="preserve"><value>全文检测</value></data>
+  <data name="LabelMergeCheck" xml:space="preserve"><value>合并复核</value></data>
+  <data name="LabelStaleNotice" xml:space="preserve"><value>段落已改，需重检</value></data>
+  <data name="LabelHuman" xml:space="preserve"><value>人工</value></data>
+  <data name="LabelSuspected" xml:space="preserve"><value>疑似</value></data>
+  <data name="LabelAi" xml:space="preserve"><value>AI</value></data>
+  <data name="LabelConfidence" xml:space="preserve"><value>置信度</value></data>
+  <data name="LabelRiskRatio" xml:space="preserve"><value>风险占比</value></data>
+  <data name="LabelDistribution" xml:space="preserve"><value>段落分布</value></data>
+  <data name="LabelSkipped" xml:space="preserve"><value>跳过</value></data>
+  <data name="LabelModified" xml:space="preserve"><value>已改</value></data>
+  <data name="LabelFailed" xml:space="preserve"><value>失败</value></data>
+  <data name="LabelRecheck" xml:space="preserve"><value>重检</value></data>
+  <data name="LabelDetect" xml:space="preserve"><value>检测</value></data>
+  <data name="LabelRetry" xml:space="preserve"><value>重试</value></data>
+  <data name="SettingsApiKey" xml:space="preserve"><value>API Key</value></data>
+  <data name="SettingsEndpoint" xml:space="preserve"><value>接口地址</value></data>
+  <data name="SettingsSkipShort" xml:space="preserve"><value>跳过短段（字数）</value></data>
+  <data name="SettingsFullMerge" xml:space="preserve"><value>全文合并复核</value></data>
+  <data name="SettingsHeatmapTint" xml:space="preserve"><value>高风险段落底色</value></data>
+  <data name="SettingsTheme" xml:space="preserve"><value>主题</value></data>
+  <data name="ThemeDefault" xml:space="preserve"><value>跟随系统</value></data>
+  <data name="ThemeLight" xml:space="preserve"><value>浅色</value></data>
+  <data name="ThemeDark" xml:space="preserve"><value>深色</value></data>
+  <data name="ToastCopiedAll" xml:space="preserve"><value>已复制全文</value></data>
+  <data name="ToastAuditDone" xml:space="preserve"><value>检测完成</value></data>
+  <data name="ToastRecheckDone" xml:space="preserve"><value>重检完成</value></data>
+  <data name="ToastSaved" xml:space="preserve"><value>已保存</value></data>
+  <data name="ErrClipboardNoText" xml:space="preserve"><value>剪贴板无文本内容</value></data>
+  <data name="ErrClipboardEmpty" xml:space="preserve"><value>剪贴板为空</value></data>
+  <data name="ErrUnsupportedFile" xml:space="preserve"><value>仅支持 .txt / .md 文件</value></data>
+  <data name="ErrEmptyText" xml:space="preserve"><value>请输入待检测正文</value></data>
+  <data name="ErrMissingApiKey" xml:space="preserve"><value>请先配置 API Key</value></data>
+  <data name="ErrInvalidEndpoint" xml:space="preserve"><value>接口地址格式无效</value></data>
+  <data name="ErrTimeout" xml:space="preserve"><value>请求超时（超过 60 秒）</value></data>
+  <data name="ErrUnauthorized" xml:space="preserve"><value>鉴权失败（401）：API Key 无效或已过期</value></data>
+  <data name="ErrForbidden" xml:space="preserve"><value>访问被拒绝（403）：请检查权限或额度</value></data>
+  <data name="ErrRateLimited" xml:space="preserve"><value>请求过于频繁（429）：触发限流，请稍后再试</value></data>
+  <data name="ErrEmptyResponse" xml:space="preserve"><value>接口返回空响应</value></data>
+  <data name="ErrSegmentMissing" xml:space="preserve"><value>接口未返回该段结果</value></data>
+  <data name="FormatCopiedParagraph" xml:space="preserve"><value>已复制 {0}</value></data>
+  <data name="FormatChapterStats" xml:space="preserve"><value>{0} 字 · {1} 段</value></data>
+  <data name="FormatSegmentComparison" xml:space="preserve"><value>逐段 {0} / {1} / {2}</value></data>
+  <data name="FormatTestSuccessWithTokens" xml:space="preserve"><value>连接成功（Token {0}）</value></data>
+  <data name="FormatTestSuccess" xml:space="preserve"><value>连接成功</value></data>
+  <data name="FormatMergeError" xml:space="preserve"><value>全文复核失败：{0}</value></data>
+  <data name="FormatSegmentError" xml:space="preserve"><value>逐段检测失败：{0}</value></data>
+  <data name="FormatNetworkError" xml:space="preserve"><value>网络连接失败：{0}</value></data>
+  <data name="FormatJsonParseError" xml:space="preserve"><value>返回数据解析失败：{0}</value></data>
+  <data name="FormatHttpError" xml:space="preserve"><value>请求失败（HTTP {0}）{1}</value></data>
+</root>

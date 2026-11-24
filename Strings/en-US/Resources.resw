@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppTitle" xml:space="preserve"><value>InkAudit</value></data>
+  <data name="ActionPaste" xml:space="preserve"><value>Paste</value></data>
+  <data name="ActionImport" xml:space="preserve"><value>Import</value></data>
+  <data name="ActionEdit" xml:space="preserve"><value>Edit</value></data>
+  <data name="ActionCopy" xml:space="preserve"><value>Copy</value></data>
+  <data name="ActionCancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="ActionApply" xml:space="preserve"><value>Apply</value></data>
+  <data name="ActionSave" xml:space="preserve"><value>Save</value></data>
+  <data name="ActionSaveAndRecheck" xml:space="preserve"><value>Save &amp; Recheck</value></data>
+  <data name="ActionClearFilter" xml:space="preserve"><value>Clear</value></data>
+  <data name="ActionStartAudit" xml:space="preserve"><value>Audit</value></data>
+  <data name="ActionPasteAndAudit" xml:space="preserve"><value>Paste &amp; Audit</value></data>
+  <data name="ActionMergedOnly" xml:space="preserve"><value>Full-Text Merge Only</value></data>
+  <data name="ActionRecheckModified" xml:space="preserve"><value>Recheck Edited</value></data>
+  <data name="ActionSettings" xml:space="preserve"><value>Settings</value></data>
+  <data name="ActionTest" xml:space="preserve"><value>Test</value></data>
+  <data name="PlaceholderPaste" xml:space="preserve"><value>Paste text…</value></data>
+  <data name="LabelFullTextAudit" xml:space="preserve"><value>Full Text</value></data>
+  <data name="LabelMergeCheck" xml:space="preserve"><value>Merge</value></data>
+  <data name="LabelStaleNotice" xml:space="preserve"><value>Edited — re-audit needed</value></data>
+  <data name="LabelHuman" xml:space="preserve"><value>Human</value></data>
+  <data name="LabelSuspected" xml:space="preserve"><value>Suspected</value></data>
+  <data name="LabelAi" xml:space="preserve"><value>AI</value></data>
+  <data name="LabelConfidence" xml:space="preserve"><value>Confidence</value></data>
+  <data name="LabelRiskRatio" xml:space="preserve"><value>Risk Ratio</value></data>
+  <data name="LabelDistribution" xml:space="preserve"><value>Paragraphs</value></data>
+  <data name="LabelSkipped" xml:space="preserve"><value>Skipped</value></data>
+  <data name="LabelModified" xml:space="preserve"><value>Edited</value></data>
+  <data name="LabelFailed" xml:space="preserve"><value>Failed</value></data>
+  <data name="LabelRecheck" xml:space="preserve"><value>Recheck</value></data>
+  <data name="LabelDetect" xml:space="preserve"><value>Check</value></data>
+  <data name="LabelRetry" xml:space="preserve"><value>Retry</value></data>
+  <data name="SettingsApiKey" xml:space="preserve"><value>API Key</value></data>
+  <data name="SettingsEndpoint" xml:space="preserve"><value>Endpoint</value></data>
+  <data name="SettingsSkipShort" xml:space="preserve"><value>Skip short (chars)</value></data>
+  <data name="SettingsFullMerge" xml:space="preserve"><value>Full-text merge check</value></data>
+  <data name="SettingsHeatmapTint" xml:space="preserve"><value>Highlight risky rows</value></data>
+  <data name="SettingsTheme" xml:space="preserve"><value>Theme</value></data>
+  <data name="ThemeDefault" xml:space="preserve"><value>System</value></data>
+  <data name="ThemeLight" xml:space="preserve"><value>Light</value></data>
+  <data name="ThemeDark" xml:space="preserve"><value>Dark</value></data>
+  <data name="ToastCopiedAll" xml:space="preserve"><value>Copied</value></data>
+  <data name="ToastAuditDone" xml:space="preserve"><value>Done</value></data>
+  <data name="ToastRecheckDone" xml:space="preserve"><value>Rechecked</value></data>
+  <data name="ToastSaved" xml:space="preserve"><value>Saved</value></data>
+  <data name="ErrClipboardNoText" xml:space="preserve"><value>Clipboard has no text</value></data>
+  <data name="ErrClipboardEmpty" xml:space="preserve"><value>Clipboard is empty</value></data>
+  <data name="ErrUnsupportedFile" xml:space="preserve"><value>Only .txt / .md supported</value></data>
+  <data name="ErrEmptyText" xml:space="preserve"><value>Please enter text to audit</value></data>
+  <data name="ErrMissingApiKey" xml:space="preserve"><value>Configure API Key first</value></data>
+  <data name="ErrInvalidEndpoint" xml:space="preserve"><value>Invalid endpoint URL</value></data>
+  <data name="ErrTimeout" xml:space="preserve"><value>Request timed out (60s)</value></data>
+  <data name="ErrUnauthorized" xml:space="preserve"><value>Unauthorized (401): invalid API Key</value></data>
+  <data name="ErrForbidden" xml:space="preserve"><value>Forbidden (403): check permissions or quota</value></data>
+  <data name="ErrRateLimited" xml:space="preserve"><value>Rate limited (429): retry later</value></data>
+  <data name="ErrEmptyResponse" xml:space="preserve"><value>Empty API response</value></data>
+  <data name="ErrSegmentMissing" xml:space="preserve"><value>No segment result returned</value></data>
+  <data name="FormatCopiedParagraph" xml:space="preserve"><value>Copied #{0}</value></data>
+  <data name="FormatChapterStats" xml:space="preserve"><value>{0} chars · {1} paras</value></data>
+  <data name="FormatSegmentComparison" xml:space="preserve"><value>Seg {0} / {1} / {2}</value></data>
+  <data name="FormatTestSuccessWithTokens" xml:space="preserve"><value>Connected (Token {0})</value></data>
+  <data name="FormatTestSuccess" xml:space="preserve"><value>Connected</value></data>
+  <data name="FormatMergeError" xml:space="preserve"><value>Merge check failed: {0}</value></data>
+  <data name="FormatSegmentError" xml:space="preserve"><value>Paragraph audit failed: {0}</value></data>
+  <data name="FormatNetworkError" xml:space="preserve"><value>Network error: {0}</value></data>
+  <data name="FormatJsonParseError" xml:space="preserve"><value>Invalid response JSON: {0}</value></data>
+  <data name="FormatHttpError" xml:space="preserve"><value>HTTP {0}{1}</value></data>
+</root>
