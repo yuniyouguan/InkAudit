@@ -6,8 +6,10 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media.Imaging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
@@ -64,7 +66,7 @@ public sealed partial class MainWindow : Window
     }
 
     /// <summary>
-    /// 配置无边界原生标题栏、Tall 标题栏按钮高度与默认舒适窗口尺寸。
+    /// 配置无边界原生标题栏、Tall 标题栏按钮高度、应用窗口/标题栏图标与默认舒适窗口尺寸。
     /// </summary>
     private void ConfigureWindowChrome()
     {
@@ -73,12 +75,27 @@ public sealed partial class MainWindow : Window
 
         try
         {
+            string icoPath = Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.ico");
+            if (File.Exists(icoPath))
+            {
+                AppWindow.SetIcon(icoPath);
+            }
+
+            string pngPath = Path.Combine(AppContext.BaseDirectory, "Assets", "Square44x44Logo.scale-200.png");
+            if (File.Exists(pngPath))
+            {
+                AppTitleBar.IconSource = new ImageIconSource
+                {
+                    ImageSource = new BitmapImage(new Uri(pngPath))
+                };
+            }
+
             AppWindow.TitleBar.PreferredHeightOption = TitleBarHeightOption.Tall;
             AppWindow.Resize(new SizeInt32(1280, 820));
         }
         catch
         {
-            // 在低分辨率或受限显示器上忽略尺寸与标题栏高度调整异常
+            // 在低分辨率或受限显示器上忽略尺寸、图标与标题栏高度调整异常
         }
     }
 
